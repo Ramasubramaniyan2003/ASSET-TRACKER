@@ -1,0 +1,19 @@
+.employeetableview{
+    height: 60vh;
+    /* border: 1px groove black; */
+}
+.employeetableview th {
+    width: 150px;
+    /* border: 1px groove black; */
+}
+.employeeimg {
+    text-align:center;
+}
+.employeeimgtable{
+    /* border:1px groove black; */
+    width:33% ;
+     /* text-align: end; */
+     display: grid;
+    margin-left:auto;
+    margin-right: auto; 
+}

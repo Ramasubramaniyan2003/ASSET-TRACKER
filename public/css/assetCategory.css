@@ -1,0 +1,14 @@
+
+.assetcategorytable td,.assetcategorytable th{
+    padding: 15px 25px;
+    border-style: ridge;
+    border-width: thin;
+   border-color: black;
+  }
+.assetcategorytable thead{
+    border-bottom: thin ridge black;
+}
+.assetcategorytable{
+    width: 100%;
+    border: groove solid black;
+  }

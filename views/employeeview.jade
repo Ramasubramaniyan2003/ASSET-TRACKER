@@ -1,0 +1,64 @@
+
+head
+    script(defer src="/js/employeeView.js")
+    link(rel="stylesheet", href="/css/employeeview.css")
+    
+body
+    .modal.fade#viewmodal(tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true")
+            .modal-dialog.modal-fullscreen(role="document")
+               .modal-content
+                    .modal-header
+                        h5.modal-title#modalTitleId
+                            Modal Employee Detail
+                        button(type="button" data-bs-dismiss="modal" aria-label="Close").btn-close
+                    .modal-body    
+                        .row 
+                            .col-lg-3.mt-4
+                                table.employeeimgtable
+                                    tr
+                                        .employeeimg
+                                            img#employeeprofile(src="data:image/jpeg;base64,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" height="250px" width="200px")
+                                    tr 
+                                        th Status
+                                        td#viewstatus 
+                                    tr 
+                                        th ID
+                                        td#viewid  
+                            .col-lg-5
+                                table.employeetableview
+                                    tr 
+                                    th Name 
+                                    td#viewname
+                                    tr    
+                                        th Email 
+                                        td#viewemail
+                                    tr
+                                        th Branch 
+                                        td#viewbranch
+                                    tr 
+                                        th Address 
+                                        td#viewaddress
+                                    tr 
+                                        th Contact 
+                                        td#viewcontact
+                            .col-lg-3   
+                                table.employeetableview     
+                                    tr
+                                        th Joindate 
+                                        td#viewjoinDate
+                                    tr 
+                                        th EndDate 
+                                        td#viewendDate
+                                    tr 
+                                        th  Salary
+                                        td#viewsalary
+                                    tr 
+                                        th  Department 
+                                        td#viewdepartment
+                                    tr 
+                                        th Last updated At 
+                                        td#viewupdated
+                    .modal-footer
+                        button.btn.btn-danger(aria-label="Close" data-bs-dismiss="modal") close    
+                                    
+                                        

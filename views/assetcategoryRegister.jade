@@ -1,0 +1,35 @@
+
+//- head 
+//-     meta(charset='UTF-8')
+//-     meta(name='viewport' content='width=device-width, initial-scale=1.0')
+link( rel="stylesheet" href="/css/assetcategoryRegister.css")
+//-     link(rel="stylesheet" href="/bootstrap-5.0.2-dist/bootstrap-5.0.2-dist/js/bootstrap.min.js")
+//-     <link rel="stylesheet" href="/bootstrap-5.0.2-dist/bootstrap-5.0.2-dist/css/bootstrap.min.css">
+script(src="/js/assetcategoryRegister.js")
+
+
+body
+        .container.tablecontainer
+            .row.mt-5
+                .col-sm-3
+                    h3.employeetopic Asset Category
+                .col-sm-9
+                    a.addassetcategorybutton#addassetcategorybutton.btn.btn-primary(type="button" data-bs-toggle="modal" data-bs-target="#assetcategorymodalId")  Add Asset
+            .modal.fade#assetcategorymodalId(tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true")
+                .modal-dialog.modal-none(role="document")
+                    .modal-content
+                        .modal-header
+                            h5.modal-title#modalTitleId
+                                Modal Add Asset 
+                            button(type="button" data-bs-dismiss="modal" aria-label="Close").btn-close
+                        .modal-body    
+                            
+                            table.assetdetailtable
+                                tr
+                                    td 
+                                        label(for="assetname").mx-3  Asset Name
+                                        input(type="text" name="name" id="assetname" placeholder="Asset name"  )   
+                        .modal-footer
+                            button.btn.btn-danger(aria-label="Close" data-bs-dismiss="modal") Cancel 
+                            button.btn.btn-success(onclick="addassetcategory()") Add
+                                

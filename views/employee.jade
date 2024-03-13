@@ -1,0 +1,47 @@
+
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  title Asset Tracker
+  link(rel='stylesheet' href='bootstrap-5.0.2-dist/bootstrap-5.0.2-dist/css/bootstrap.min.css')
+  link(rel='stylesheet' href='bootstrap-5.0.2-dist/bootstrap-5.0.2-dist/js/bootstrap.min.js')
+  script(src='/bootstrap-5.0.2-dist/bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js')
+  link(rel='stylesheet' href='css/employee.css')
+
+  link(href="https://cdn.datatables.net/v/bs5/dt-2.0.1/datatables.min.css" rel="stylesheet")
+  script(defer src="https://cdn.datatables.net/v/bs5/dt-2.0.1/datatables.min.js")
+
+  script(defer src='/js/employee.js') 
+//
+  Add/Edit/View all employees in the company. Provide filters for
+  active/inactive employees along with search capabilities
+.container-fluid
+include ./sidebar.jade
+  include ./employeeRegister.jade
+  include ./employeeedit.jade
+  include ./employeeview.jade  
+  //- .custom-cls 
+  //- p Filter
+  //- select#customFilter.form-control(placeholder="Status" onclick="activeinactive()")
+  //- option(value="Inactive") Inactive
+  //- option(value="Active") Active    
+  table#employeetable.employeetable
+    thead
+      th ID
+      th Name
+      th Email
+      th Department
+      th Status
+      th Actions
+script( src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js")
+script(src="https://code.jquery.com/jquery-3.6.0.min.js")
+script(src="https://code.jquery.com/jquery-3.7.1.js")
+script(src="https://cdn.datatables.net/2.0.2/js/dataTables.js")
+script(src="https://cdn.datatables.net/buttons/3.0.1/js/dataTables.buttons.js")
+script(src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.dataTables.js")
+script(src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js")
+script(src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js")
+script(src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js")
+script(src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.html5.min.js")
+script(src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.print.min.js")

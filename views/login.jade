@@ -1,0 +1,30 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Document
+        link(rel="stylesheet", href="/bootstrap-5.0.2-dist/bootstrap-5.0.2-dist/css/bootstrap.min.css")
+        link(rel="stylesheet", href="/css/login.css")
+        script(src="/js/login.js")
+    body 
+        .container-fluid 
+            .row 
+                .col-sm-6.bg-primary.leftside
+                    h4.text-white.m-5 Asset Tracker
+                .col-sm-6 
+                    .loginbox
+                        h3 Asset Tracker
+                        .login.mt-3
+                            label(for="username") Username 
+                            br
+                            input(type="text" name="username" placeholder="Username")#username
+                            br
+                            label(for="password").mt-3 password 
+                            br
+                            input#password(type="password" name="password" placeholder="password")
+                            br
+                            br
+                            button#login.btn.btn-primary.w-100.mb-5.mt-2(onclick="userchecking()") Login
+
+                    
