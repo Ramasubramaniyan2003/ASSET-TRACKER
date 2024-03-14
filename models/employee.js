@@ -29,8 +29,8 @@ const employees= sequelize.define('employees',{
         type:DataTypes.STRING
     },
     endDate:{
-        type:DataTypes.STRING
-        
+        type:DataTypes.STRING,
+        defaultValue:"NA"
     },
     salary:{
         type:DataTypes.STRING

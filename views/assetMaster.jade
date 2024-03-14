@@ -1,0 +1,148 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Asset tracker
+        link(rel="stylesheet", href="/bootstrap-5.0.2-dist/bootstrap-5.0.2-dist/css/bootstrap.min.css")
+        link(rel="stylesheet", href="/css/assetMaster.css")
+        link(href="https://cdn.datatables.net/v/bs5/dt-2.0.1/datatables.min.css" rel="stylesheet")
+
+    body 
+    include ./sidebar.jade
+        .container-fluid
+            .row.mt-5
+                .col-sm-3
+                    h3.employeetopic Assets
+                .col-sm-9
+                    a.addasset.btn.btn-primary(type="button" data-bs-toggle="modal" data-bs-target="#assetmodalId")  Add Asset
+            .modal.fade#assetmodalId(tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true")
+                .modal-dialog.modal-lg(role="document")
+                    .modal-content
+                        .modal-header
+                            h5.modal-title#modalTitleId
+                                Modal Add Asset 
+                            button(type="button" data-bs-dismiss="modal" aria-label="Close").btn-close
+                        .modal-body    
+                             table.mt-5.assetinputtable
+                                tr 
+                                    th 
+                                        p(for="assetname") Asset name
+                                    td 
+                                        input(type="text" name="name"  id="assetname" placeholder="Laptop" )
+                                tr
+                                    th
+                                        p(for="serial_no" ) Serial no
+                                    td 
+                                        input(type="text" name="serial_no" id="serial_no" placeholder="9898 43434 2322"  )
+                                tr 
+                                    th 
+                                        p(for="model") Model
+                                    td 
+                                        input(type="text" name="model" id="model" placeholder="9876543210" )    
+                                tr 
+                                    th 
+                                        p(for="make") Make
+                                    td 
+                                        input(type="text" id="make" placeholder="make")       
+                                tr 
+                                    th 
+                                        p(for="scrapstatus") Scrapstatus
+                                    td 
+                                        select#scrapstatus(name='scrapstatus')
+                                            option(value="Active") Active
+                                            option(value="Inactive") Inactive
+                                
+                                   
+                               
+                        .modal-footer
+                            button.btn.btn-danger(aria-label="Close" data-bs-dismiss="modal") Cancel 
+                            button.btn.btn-success#addasset Add
+
+             //edit
+            .modal.fade#editassetmodalId(tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true")
+                .modal-dialog.modal-lg(role="document")
+                    .modal-content
+                        .modal-header
+                            h5.modal-title#modalTitleId
+                                Modal Add Asset 
+                            button(type="button" data-bs-dismiss="modal" aria-label="Close").btn-close
+                        .modal-body    
+                             table.mt-5.assetinputtable
+                                tr 
+                                    th 
+                                        p(for="editassetname") Asset name
+                                    td 
+                                        input(type="text" name="name"  id="editassetname" placeholder="Laptop" )
+                                tr
+                                    th
+                                        p(for="serial_no" ) Serial no
+                                    td 
+                                        input(type="text" name="serial_no" id="editserial_no" placeholder="9898 43434 2322"  )
+                                tr 
+                                    th 
+                                        p(for="model") Model
+                                    td 
+                                        input(type="text" name="model" id="editmodel" placeholder="9876543210" )    
+                                tr 
+                                    th 
+                                        p(for="make") Make
+                                    td 
+                                        input(type="text" id="editmake" placeholder="make")       
+                                tr 
+                                    th 
+                                        p(for="scrapstatus") Scrapstatus
+                                    td 
+                                        select#editscrapstatus(name='scrapstatus')
+                                            option(value="Active") Active
+                                            option(value="Inactive") Inactive 
+                        .modal-footer
+                            button.btn.btn-danger(aria-label="Close" data-bs-dismiss="modal") Cancel 
+                            button.btn.btn-success#addasset(onclick="edit()") Edit
+            //Issue asset
+            .modal.fade#issueassetmodalId(tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true")
+                    .modal-dialog.modal-none(role="document")
+                        .modal-content
+                            .modal-header
+                                h5.modal-title#modalTitleId
+                                    Modal Add Asset 
+                                button(type="button" data-bs-dismiss="modal" aria-label="Close").btn-close
+                            .modal-body    
+                                table.mt-5.assetinputtable
+                                    tr 
+                                        th 
+                                            p(for="issueassetname") Employee
+                                        td 
+                                            select#issueassetname(name="issueassetname") 
+                            .modal-footer
+                                button.btn.btn-danger(aria-label="Close" data-bs-dismiss="modal") Cancel 
+                                button.btn.btn-success#addasset(onclick="issueasset()") Edit
+        
+            table#assettable.assettable.mt-1.table.table-bordered
+                thead
+                    th ID
+                    th Serial_No
+                    th Name 
+                    th Model
+                    th Make
+                    th Scrapstatus
+                    th Action 
+                
+script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js")
+script(src="https://code.jquery.com/jquery-3.6.0.min.js")
+script(src="https://code.jquery.com/jquery-3.7.1.js")
+script(src="https://cdn.datatables.net/2.0.2/js/dataTables.js")
+script(src="https://cdn.datatables.net/v/bs5/dt-2.0.1/datatables.min.js")
+script(src="https://cdn.datatables.net/buttons/3.0.1/js/dataTables.buttons.js")
+script(src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.dataTables.js")
+script(src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js")
+script(src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js")
+script(src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js")
+script(src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.html5.min.js")
+script(src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.print.min.js")
+script(src="/bootstrap-5.0.2-dist/bootstrap-5.0.2-dist/js/bootstrap.min.js")
+script(src='/bootstrap-5.0.2-dist/bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js')
+
+script(src="/js/assetMaster.js"); 
+
+        

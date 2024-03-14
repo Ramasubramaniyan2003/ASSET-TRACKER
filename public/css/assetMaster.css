@@ -1,37 +1,37 @@
+/* /* .assettable{
+    width: 100%;
+} */
 
-/* .assetcategorytable td,.assetcategorytable th{
+.addasset{
+    float: right;
+}
+/* .assettable td,.assettable th{
     padding: 15px 25px;
     border-style: ridge;
     border-width: thin;
    border-color: black;
-  }
-.assetcategorytable thead{
-    border-bottom: thin ridge black;
-}
-.assetcategorytable{
-    width: 100%;
-    border: groove solid black;
   } */
-  .dt-buttons button{
+.dt-buttons button{
     border-radius: 5px;
     height: 37px;
     margin-bottom: 10px;
     width: 70px;
-  }
-  .buttons-copy{
+}
+.buttons-copy{
     background-color: rgb(12, 12, 181);
     color: white;
     border: none;
-  }
-  .buttons-excel{
+}
+.buttons-excel{
     background-color: #006600;
     color: white;
     border: none;
     /* margin-left: 10px; */
-  }
-  .buttons-pdf{
-    background-color:  #b30000;
+}
+.buttons-pdf{
+    background-color: #b30000;
     color: white;
     border: none;
     /* margin-left: 10px; */
-  }
+}
+ 

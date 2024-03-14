@@ -61,3 +61,6 @@ async function registeremployee() {
     }
 }
 
+function close(){
+    console.log("called");
+}

@@ -1,39 +1,47 @@
 .addemployeebutton{
   float: right;
 }
-.employeetable td,.employeetable th{
-  padding: 15px 25px;
-  border-style: ridge;
-  border-width: thin;
- border-color: black;
+.dt-buttons button{
+  border-radius: 5px;
+  height: 37px;
+  margin-bottom: 10px;
+  width: 70px;
+}
+.buttons-copy{
+  background-color: rgb(12, 12, 181);
+  color: white;
+  border: none;
+}
+.buttons-excel{
+  background-color: #006600;
+  color: white;
+  border: none;
+  /* margin-left: 10px; */
+}
+.buttons-pdf{
+  background-color: #b30000;
+  color: white;
+  border: none;
+  /* margin-left: 10px; */
 }
 
-.employeetopic{
-  text-align: left;
-}
-.employeetable thead{
-    border-bottom: thin ridge black;
-}
-.custom-cls select{
+/* .custom-cls select{
   display: inline;
   height: 33px;
   width: 100px;
   margin-left: 70%;
   position: relative;
   top: 40px;
-}
-.custom-cls p{
+} */
+/* .custom-cls p{
   display: inline;
   margin-left: 66%;
   position: relative;
   top: 68px;
-}
-.employeetable{
-  width: 100%;
-  border: groove solid black;
-}
-.removeFormat {
+} */
+
+/* .removeFormat {
   text-decoration: none; 
  cursor:auto;
-}
+} */
 

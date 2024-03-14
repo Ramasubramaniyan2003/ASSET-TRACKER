@@ -1,4 +1,3 @@
-
 // fetching employees into table
 fetching('/fetching/employeedetails')
 async function fetching(url) {
@@ -6,48 +5,46 @@ async function fetching(url) {
         var res = await fetch(url);
         var data = await res.json();
         let table = new DataTable('#employeetable', {
-        //     buttons: ['copy','excel','pdf'],
-        //     layout: {
-        //         topStart: 'buttons'
-        //     },
             data: data,
+            buttons: ['copy', { extend: 'excel', "title": "Employees" }, { extend: 'pdf', 'title': 'Employee' }],
+            layout: {
+                top: 'buttons'
+            },
             columns: [
                 {
-                    data: 'id', "mData": null,
-                    "sWidth": "5%",
+                    data: 'id',
                     "bSortable": false,
                     "sClass": "alignCenter"
                 },
                 {
                     data: 'name', "mData": null,
-                    "sWidth": "5%",
+
                     "bSortable": false,
                     "sClass": "alignCenter"
                 },
                 {
                     data: 'email', "mData": null,
-                    "sWidth": "5%",
+
                     "bSortable": false,
                     "sClass": "alignCenter"
                 },
                 {
                     data: 'department', "mData": null,
-                    "sWidth": "5%",
+
                     "bSortable": false,
                     "sClass": "alignCenter"
                 },
                 {
                     data: 'status', "mData": null,
-                    "sWidth": "5%",
                     "bSortable": false,
                     "sClass": "alignCenter"
                 },
                 {
-                    data: null, "mData": null,
-                    "sWidth": "10%",
+                    data: null,
                     "bSortable": false,
+                    "sWidth":"7%",
                     "render": function (data) {
-                        return `<div><a  class="btn btn-success" data-id=` + data.id + ` onclick="editemployee(this.getAttribute('data-id'))" data-bs-toggle="modal" data-bs-target="#editmodalId">Edit</a> <a class="btn btn-success" data-id=` + data.id + ` onclick="Viewemployee(this.getAttribute('data-id'))" data-bs-toggle="modal" data-bs-target="#viewmodal">View</a></div>`
+                        return `<div class="mx-auto"><a  class="btn btn-primary" data-id=` + data.id + ` onclick="editemployee(this.getAttribute('data-id'))" data-bs-toggle="modal" data-bs-target="#editmodalId">Edit</a> `//<a class="btn btn-success" data-id=` + data.id + ` onclick="Viewemployee(this.getAttribute('data-id'))" data-bs-toggle="modal" data-bs-target="#viewmodal">View</a></div>`
                     }
                 }
             ]
@@ -103,8 +100,6 @@ async function editemployee(a) {
     var salary = document.getElementById('editsalary').value = employeeeditdata.salary;
     var department = document.getElementById('editdepartment').value = employeeeditdata.department;
 }
-
-
 
 var id = localStorage.getItem('id');
 

@@ -2,56 +2,28 @@
   .row.flex-nowrap
     .col-auto.col-md-3.col-xl-2.px-sm-2.px-0.bg-dark
       .d-flex.flex-column.align-items-center.align-items-sm-start.px-3.pt-2.text-white.min-vh-100
-        a.d-flex.align-items-center.pb-3.mb-md-0.me-md-auto.text-white.text-decoration-none(href='/')
-          span.fs-5.d-none.d-sm-inline Menu
+        .d-flex.align-items-center.pb-3.mb-md-0.me-md-auto.text-white.text-decoration-none
+          a(href='/').text-decoration-none.text-white
+            span.fs-5.d-none.d-sm-inline Menu 
+              //- button(type="button" data-bs-dismiss="modal" aria-label="Close" onclick="fun()").btn-close.ms-5.ps-5
+          
         ul#menu.nav.nav-pills.flex-column.mb-sm-auto.mb-0.align-items-center.align-items-sm-start
-          li.nav-item
-            a.nav-link.align-middle.px-0(href='#').text-white
-              i.fs-4.bi-house
-              span.ms-1.d-none.d-sm-inline Home
           li
             a.nav-link.px-0.align-middle(href='#submenu1' data-bs-toggle='collapse').text-white
               i.fs-4.bi-speedometer2
               span.ms-1.d-none.d-sm-inline Dashboard
-            ul#submenu1.collapse.show.nav.flex-column.ms-1(data-bs-parent='#menu').text-white
-              li.w-100
-                a.nav-link.px-0(href='/employee').text-white
-                  span.d-none.d-sm-inline Employee Master
-              li
-                a.nav-link.px-0(href='/asset-category').text-white
-                  span.d-none.d-sm-inline Asset Category
-              li
-                a.nav-link.px-0(href='#').text-white
-                  span.d-none.d-sm-inline Asset Master
-          //- li
-          //-   a.nav-link.px-0.align-middle(href='#').text-white
-          //-     i.fs-4.bi-table
-          //-     span.ms-1.d-none.d-sm-inline Asset Master
           li
-            a.nav-link.px-0.align-middle(href='#submenu3' data-bs-toggle='collapse').text-white
+            a.nav-link.px-0.align-middle(href='/employee').text-white
               i.fs-4.bi-grid
-              span.ms-1.d-none.d-sm-inline Settings
-            ul#submenu3.collapse.nav.flex-column.ms-1(data-bs-parent='#menu').text-white
-              li.w-100
-                a.nav-link.px-0(href='#')
-                  span.d-none.d-sm-inline Product
-                  |  1
-              li
-                a.nav-link.px-0(href='#')
-                  span.d-none.d-sm-inline Product
-                  |  2
-              li
-                a.nav-link.px-0(href='#')
-                  span.d-none.d-sm-inline Product
-                  |  3
-              li
-                a.nav-link.px-0(href='#')
-                  span.d-none.d-sm-inline Product
-                  |  4
+              span.ms-1.d-sm-inline Employee Master
           li
-            a.nav-link.px-0.align-middle(href='#').text-white
+            a.nav-link.px-0.align-middle(href='/asset-category').text-white
               i.fs-4.bi-people
-              span.ms-1.d-none.d-sm-inline About
+              span.ms-1.d-none.d-sm-inline Asset Category   
+          li
+            a.nav-link.px-0.align-middle(href='/asset-tracker/asset-master/').text-white
+              i.fs-4.bi-people
+              span.ms-1.d-none.d-sm-inline Asset Master
         hr
         .dropdown.pb-4
           a#dropdownUser1.d-flex.align-items-center.text-white.text-decoration-none.dropdown-toggle(href='#' data-bs-toggle='dropdown' aria-expanded='false')
