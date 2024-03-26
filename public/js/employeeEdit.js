@@ -1,17 +1,17 @@
-var status = "Active";
-function statuschecking() {
-
-    var a = document.getElementById('editflexSwitchCheckChecked').checked;
-    if (a) {
-        console.log("Active")
-        status = "Active"
-        document.getElementById('activestatus').innerHTML="Active"
+// console.log('edit');
+var editstatus = "Active";
+function editstatuschecking() {
+    var Radio = document.getElementById('editflexSwitchCheckChecked').checked;
+    let activestatus=document.getElementById('editactivestatus')
+  
+    if (Radio) {
+        editstatus = "Active"
+        activestatus.innerHTML=editstatus
+      console.log(activestatus);
     }
     else {
-        status = "Inactive";
-       var inactive= document.getElementById('activestatus').innerHTML=status;
-    //    inactive.style.color="red"
-       console.log(inactive);
+        editstatus = "Inactive";
+      activestatus.innerHTML=editstatus 
     }
 }
 async function editemployeesubmit() {
@@ -24,7 +24,6 @@ async function editemployeesubmit() {
     var joindate = document.getElementById('editjoindate').value;
     var enddate = document.getElementById('editenddate').value;
     var salary = document.getElementById('editsalary').value;
-    var photo = document.getElementById('photo').value;
     var department = document.getElementById('editdepartment').value;
     var employeedata = await fetch('/employee/details/edit', {
         method: 'PUT',
@@ -39,9 +38,9 @@ async function editemployeesubmit() {
             joindate: joindate,
             enddate: enddate,
             salary: salary,
-            photo: photo,
+            photo: null,
             department: department,
-            status: status
+            status: editstatus
         })
     })
     var res = await employeedata.json();
@@ -50,6 +49,11 @@ async function editemployeesubmit() {
     if (res.message) {
         alert(res.message);
         sessionStorage.removeItem('editId');
-        window.location.reload();
+        // window.location.reload();
+        // $('#employeetable').DataTable().fnDraw()
+        // table.ajax.reload()
+    }
+    if(res.Error){
+        alert(res.Error)
     }
 }

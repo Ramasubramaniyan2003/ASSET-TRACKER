@@ -14,7 +14,9 @@ async function assetcategoryfetch(url) {
             layout: {
                 top: 'buttons'
             },
-            "columnDefs": [
+            scrollY:'40vh',
+            scrollCollapse:true,
+            columnDefs: [
                 { 'className': "dt-head-center", 'targets':'_all' },
                 // {"className": "text-center", "targets":[]}
               ],
@@ -52,13 +54,13 @@ async function assetcategoryfetch(url) {
                 {
                     data: null,
                     "mData": null,
-                    "sWidth": "7%",
+                    "sWidth": "10%",
                     "bSortable": false,
                     "sClass": "alignCenter",
                     "render": function (data) { return `<div class="btn btn-primary btn-size" data-id=` + data.id + ` onclick="assetcategoryedit(this.getAttribute('data-id'))" data-bs-toggle="modal" data-bs-target="#assetcategoryeditmodalId">Edit </div>  <div class="btn btn-danger btn-size" data-id=` + data.id + ` onclick="assetcategorydelete(this.getAttribute('data-id'))">Delete</div>` },
                 }
             ],
-            autoWidth: false
+            autoWidth: true
         })
     }
     catch (e) {
@@ -75,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function assetcategoryedit(a) {
     sessionStorage.setItem('assetcategoryid', a);
-    var fetchingassetcategory = await fetch("/asset-category/details/edit", {
+    var fetchingassetcategory = await fetch("/asset-category/details/view", {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: `{"id":"${a}"}`
@@ -86,8 +88,8 @@ async function assetcategoryedit(a) {
 }
 async function editassetcategory() {
     var id = sessionStorage.getItem('assetcategoryid');
-    var editassetname = document.getElementById('editassetname').value;
-    console.log(editassetname);
+    var editAssetName = document.getElementById('editassetname').value;
+    console.log(editAssetName);
     var sendingassetname = await fetch('/asset-category/details/edit', {
         method: 'PUT',
         headers: { 'content-type': 'application/json' },
@@ -95,7 +97,7 @@ async function editassetcategory() {
     })
     var res = await sendingassetname.json();
     alert(res.message);
-    location.reload();
+    // location.reload();
     console.log(res);
 }
 async function assetcategorydelete(id) {
@@ -108,8 +110,19 @@ async function assetcategorydelete(id) {
         })
         var res = await sendingdeleteid.json();
         alert(res.message);
-        location.reload();
+        // location.reload();
     }
 
 }
-
+async function addassetcategory(){
+    var assetname=document.getElementById('assetname').value;
+var assetcategorypromise= await fetch('/asset-category/add',{
+    method:'POST',
+    headers:{'content-type':'application/json'},
+    body:`{"asset":"${assetname}"}`
+})
+var res=await assetcategorypromise.json();
+alert(res.message);
+console.log(res);
+location.reload();
+}

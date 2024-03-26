@@ -1,46 +1,49 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-link(rel="stylesheet", href="/css/sidebar.css")
+link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css")
+link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css")
+link(rel="stylesheet" href="/css/sidebar.css")
 
-nav.navbar.navi
-  a.navbar-brand(href="#").text-white.p-3 Asset Tracker
-  .dropdown.pb-1.profile.me-5.pe-3
-          a#dropdownUser1.text-white.text-decoration-none.dropdown-toggle(href='#' data-bs-toggle='dropdown' aria-expanded='false')
-            img.rounded-circle(src='https://cdn-icons-png.flaticon.com/512/9187/9187604.png'  width='30' height='30')
-            span.ms-.d-none.d-sm-inline.mx-1#profile User
-          ul.dropdown-menu.dropdown-menu-dark.text-small.shadow.dropstart
-            //- li
-            //-   a.dropdown-item(href='#') Settings
-            //- li
-            //-   a.dropdown-item(href='#') Profile
-            //- li
-            //-   hr.dropdown-divider
-            li
-              a.dropdown-item#signout(href='#') Sign out
-.container-fluid
-  .row.flex-nowrap
-    .col-auto.col-md-3.col-xl-2.px-sm-2.px-0.bg-dark#sidebar
-      .d-flex.flex-column.align-items-center.align-items-sm-start.px-3.pt-2.text-white
-        .d-flex.align-items-end.pb-3.mb-md-0.me-md-auto.text-white.text-decoration-none
-          //- |Menu
-          button(type="button" data-bs-dismiss="modal" aria-label="Close").btn-close.btn-close-white#closebutton
-        ul#menu.nav.nav-pills.flex-column.mb-sm-auto.mb-0.align-items-center.align-items-sm-start
-          li
-            a.nav-link.px-0.align-middle(href='/dashboard').text-white
-              i.fs-4.bi-speedometer2
-              span.ms-1.d-none.d-sm-inline Dashboard
-          li
-            a.nav-link.px-0.align-middle(href='/employee').text-white
-              i.fs-4.bi-grid
-              span.ms-1.d-sm-inline Employee
-          li
-            a.nav-link.px-0.align-middle(href='/asset-category').text-white
-              i.fs-4.bi-people
-              span.ms-1.d-none.d-sm-inline Asset Category   
-          li
-            a.nav-link.px-0.align-middle(href='/asset-tracker/asset-master/').text-white
-              i.fs-4.bi-people
-              span.ms-1.d-none.d-sm-inline Assets
-    .col.py-3
-        //- <i style="font-size:24px" class="fa menubar" id="menubar" onclick="menu()">&#xf0c9;</i>
-
+body#body-pd
+    header.header#header
+        div.header_toggle 
+            |Asset Tracker
+        div 
+            //- img(src='/images/employee/employees.png',width="30px",height="30px" )#Admin.mt-3 
+            #profile.mt-5|hello
+    div.l-navbar#nav-bar
+        nav.nav
+            div 
+                div.header_toggle 
+                    i.bx.bx-menu#header-toggle1
+                div.nav_logo 
+                    i.bx.bx-logo
+                        span.nav_logo-name 
+                            //- |Asset Tracker
+                div.nav_list 
+                    a(href="/dashboard").nav_link.status 
+                        i.bx.bx-grid-alt.nav_icon
+                            span.nav_name 
+                                |Dashboard
+                    a(href="/employee").nav_link.status 
+                        i.bx.bx-user.nav_icon 
+                            span.nav_name 
+                                |Employees 
+                    a(href="/asset").nav_link.status 
+                        i.bx.bx-message-square-detail.nav_icon 
+                            span.nav_name 
+                                |Assets
+                    a(href="/asset-category").nav_link.status 
+                        i.bx.bx-bookmark.nav_icon
+                            span.nav_name 
+                                |Asset Category
+                    a(href="#").nav_link#signout.status  
+                        i.bx.bx-log-out.nav_icon 
+                            span.nav_name
+                                |SignOut
      
+    //- <!--Container Main start-->
+    div.py-3
+        .container-fluid.mb-5
+    
+<script src="/js/sidebar.js"></script>
+script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js")
+script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js")

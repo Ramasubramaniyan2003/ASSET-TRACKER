@@ -22,7 +22,7 @@ async function dashboardvalues() {
   totalemployees.innerHTML = data.total
   totalactiveemployees.innerHTML = " "+data.activecount + " "
   totalinactiveemployees.innerHTML = " " + data.inactivecount
-  totalassetcategory.innerHTML = " " + data.assetcategory
+  // totalassetcategory.innerHTML = " " + data.assetcategory
   totalasset.innerHTML = " " + data.totalasset
   activeasset.innerHTML = " "+data.activeasset + " "
   inactiveasset.innerHTML = " " + data.inactiveasset
@@ -74,4 +74,30 @@ for(let i in data.assettype){
       }
     }
   });
+
+var BranchCount=[]
+branch.forEach((i)=>{
+ var branchcount=0
+  for(let j of data.BranchCount){
+    if(i==j){
+      branchcount++
+    }
+  }
+  BranchCount.push(branchcount);
+})
+console.log(BranchCount);
+
+var piedata = data.piedata;
+var pie = new Chart("assetsholders", {
+  type: "bar",
+  data: {
+    labels:branch,
+    datasets: [{
+      backgroundColor:['red', 'yellow', 'orange', 'red', 'green'] ,
+      data: BranchCount
+    }]
+  },
+  options: { legend: { display: false }, title: { display: true, text: "Assets Distribution" }, indexAxis: 'y' }
+});
+
 }

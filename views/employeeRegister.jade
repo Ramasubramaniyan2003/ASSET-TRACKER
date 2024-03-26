@@ -1,15 +1,11 @@
 
 head 
-    meta(charset='UTF-8')
-    meta(name='viewport' content='width=device-width, initial-scale=1.0')
     link( rel="stylesheet" href="/css/employeeRegister.css")
     link(rel="stylesheet" href="/bootstrap-5.0.2-dist/bootstrap-5.0.2-dist/js/bootstrap.min.js")
     <link rel="stylesheet" href="/bootstrap-5.0.2-dist/bootstrap-5.0.2-dist/css/bootstrap.min.css">
     script(src="/js/employeeRegister.js")
-    title employee
 
 body
-
         .row.mt-3
             .col-sm-3.text-start
                 h3|Employee Master
@@ -20,10 +16,10 @@ body
                 .modal-content
                     .modal-header
                         h5.modal-title#modalTitleId
-                            Modal Asset Tracker
+                            Modal  Add Employee
                         button(type="button" data-bs-dismiss="modal" aria-label="Close").btn-close
                     .modal-body    
-                        h3.mx-5.mt-5#addemployeelogo Add Employee
+                        //- h3.mx-5.mt-5#addemployeelogo 
                         table.mt-5.inputtable
                             tr
                                 th
@@ -44,12 +40,12 @@ body
                                 th 
                                     p(for="address") Address
                                 td 
-                                    textarea#address.p-3(name="address", cols="60", rows="6" ) 
+                                    textarea#address.ps-3(name="address", cols="60", rows="6" ) 
                             tr 
                                 th 
                                     p(for="branch") Branch
                                 td 
-                                    select.p-3#branch(name="branch" )
+                                    select.ps-3#branch(name="branch" )
                                         option(value="Salem") Salem
                                         option(value="Coimbatore") Coimbatore
                                         option(value="Chennai") Chennai
@@ -60,27 +56,23 @@ body
                                 th 
                                     p(for="joindate") Join Date
                                 td 
-                                    input.p-3#joindate(type="date" name="joindate" placeholder="dd/mm/yyyy"  )
+                                    input.ps-3#joindate(type="date" name="joindate" placeholder="dd/mm/yyyy"  )
                             tr 
                                 th 
                                     p(for="enddate") End Date
                                 td 
-                                    input.p-3#enddate(type="date" name="enddate" placeholder="dd/mm/yyyy" )
+                                    input.ps-3#enddate(type="date" name="enddate" placeholder="dd/mm/yyyy" )
                             tr 
                                 th 
                                     p(for="salary") Salary
                                 td 
-                                    input.p-3(type="number" placeholder="ex:25000 per month" id='salary')
-                            tr 
-                                th 
-                                    p(for="photo") Photo
-                                td 
-                                    input.p-3#photo(type="file" name="employeeimage")
+                                    input.ps-3(type="number" placeholder="ex:25000 per month" id='salary')
+                     
                             tr 
                                 th 
                                     p(for="department" ) Department
                                 td 
-                                    select.p-3#department(name="department" required)
+                                    select.ps-3#department(name="department" required)
                                         option(value="IT") IT
                                         option(value="Human resource") Human resource
                                         option(value="Sales") Sales

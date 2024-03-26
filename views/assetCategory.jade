@@ -6,13 +6,11 @@ head
     link(rel='stylesheet' href='bootstrap-5.0.2-dist/bootstrap-5.0.2-dist/css/bootstrap.min.css')
     link(rel='stylesheet' href='css/assetCategory.css')
     link(href="https://cdn.datatables.net/v/bs5/dt-2.0.1/datatables.min.css" rel="stylesheet")
-body  
-    .container-fluid
+body 
     include ./sidebar.jade
-        <i style="font-size:24px" class="fa menubar" id="menubar" onclick="menu()">&#xf0c9;</i> 
-        //- include ./assetcategoryRegister.jade
-        .container.tablecontainer
-        .row.mt-3
+        include ./layout.jade  
+        .container-fluid.tablecontainer
+        .row
             .col-sm-3
                 h3.employeetopic Asset Category
             .col-sm-9
@@ -100,4 +98,4 @@ script(src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.print.min.js")
 script(src='/bootstrap-5.0.2-dist/bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js')
 script(src="/js/moment.js")
 script(src="/js/assetCategory.js") 
-script(src="/js/sidebar.js")         
+//- script(src="/js/sidebar.js")         

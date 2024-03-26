@@ -1,13 +1,13 @@
 const { Sequelize } = require('sequelize');
 const { sequelize } = require('../config/db')
 const { DataTypes } = require('sequelize');
-const Admin = sequelize.define('admins', {
+const Sample = sequelize.define('Sample', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true
     },
-    userName: {
+    Sample: {
         type: DataTypes.STRING,
         unique: true
     },
@@ -16,4 +16,4 @@ const Admin = sequelize.define('admins', {
     }
 });
 
-module.exports = { Admin }
+module.exports = { Sample }

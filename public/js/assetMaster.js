@@ -44,12 +44,15 @@ async function assettablefetching(url) {
             sessionStorage.removeItem('token')
             window.location = "/"
         }
+        console.log('datakk',assettabledata);
         assettable = new DataTable("#assettable", {
             data: assettabledata,
             buttons: [{ extend: 'copy' }, { extend: 'excel', "title": "Asset List" }, { extend: 'pdf', "title": "Asset List" }],
             layout: {
                 top: 'buttons'
             },
+            scrollY:'40vh',
+            scrollCollapse:true,
             "columnDefs": [
                 { 'className': "dt-head-center", 'targets': '_all' },
                 // {"className": "text-center", "targets":[]}
@@ -64,7 +67,7 @@ async function assettablefetching(url) {
                     data: 'serial_no',
                     "bSortable": false,
                     "sClass": "alignCenter",
-                    "sWidth": "5%",
+                    
                 },
                 {
                     data: 'name',
@@ -86,7 +89,7 @@ async function assettablefetching(url) {
                     "sClass": "alignCenter",
                 },
                 {
-                    data: 'scrapstatus',
+                    data: 'status',
                     "bSortable": true,
                     "sClass": "alignCenter",
                 },
@@ -102,36 +105,79 @@ async function assettablefetching(url) {
                     <div class="btn btn-danger btn-size hidden btn-sm" id=returnbutton`+ data.id + `  data-id=` + data.id + ` onclick="returnview(this.getAttribute('data-id'))" data-bs-toggle="modal" data-bs-target="#returnassetmodalId">Return</div>
                     <div class="btn btn-danger btn-sm btn-size" id=scrapbutton`+ data.id + `  data-id=` + data.id + ` onclick=" scrapview(this.getAttribute('data-id'))" data-bs-toggle="modal" data-bs-target="#scrapassetmodalId">Scrap</div>
                     <div class="btn btn-info btn-sm btn-size" id=servicebutton`+ data.id + `  data-id=` + data.id + ` onclick="serviceview(this.getAttribute('data-id'))" data-bs-toggle="modal" data-bs-target="#serviceassetmodalId">Service</div>
+                    <div class="btn btn-info btn-sm btn-size hidden" id=returnservicebutton`+ data.id + ` data-id=` + data.id + ` onclick="serviceview(this.getAttribute('data-id'))" data-bs-toggle="modal" data-bs-target="#returnserviceassetmodalId">Return Service</div>
                     `
                     }
                 }
             ],
-            autoWidth: false
+            autoWidth: true
         })
         buttonhide();
-
-
     }
     catch (e) {
         console.log(e);
     }
 }
-
 async function buttonhide() {
     var response = await fetch('/asset/details/history/');
     var data = await response.json();
+  
     for (let i = 0; i < data.length; i++) {
-        if (data[i].transaction == 'Issue') {
+        if (data[i].transaction == 'Issue' && data[i].assetId != null ) {
             var issue = document.getElementById(`assetissue${data[i].assetId}`);
             var returnbutton = document.getElementById(`returnbutton${data[i].assetId}`)
+            let servicebutton = document.getElementById(`servicebutton${data[i].assetId}`)
+           
+            if(issue==null){
+                continue;
+            }
+            servicebutton.style.display = 'none'
             issue.style.display = 'none';
             returnbutton.style.display = 'inline-block';
         }
-        else if (data[i].transaction == 'Return') {
+        else if (data[i].transaction == 'Return' && data[i].assetId != null) {
             var issue = document.getElementById(`assetissue${data[i].assetId}`);
             var returnbutton = document.getElementById(`returnbutton${data[i].assetId}`)
+            let servicebutton = document.getElementById(`servicebutton${data[i].assetId}`)
+            if(issue==null){
+                continue;
+            }
             issue.style.display = "inline-block"
             returnbutton.style.display = 'none';
+            servicebutton.style.display = 'inline-block'
+        }
+        else if (data[i].transaction == 'Service' && data[i].assetId != null) {
+            let returnservicebutton = document.getElementById(`returnservicebutton${data[i].assetId}`)
+            var issue = document.getElementById(`assetissue${data[i].assetId}`);
+            if(issue==null){
+                continue;
+            }
+            issue.style.display = 'none';
+            returnservicebutton.style.display = 'inline-block'
+            let servicebutton = document.getElementById(`servicebutton${data[i].assetId}`)
+            servicebutton.style.display = 'none'
+        }
+        else if (data[i].transaction == 'Return Service' && data[i].assetId != null) {
+            let returnservicebutton = document.getElementById(`returnservicebutton${data[i].assetId}`)
+            var issue = document.getElementById(`assetissue${data[i].assetId}`);
+            if(issue==null){
+                continue;
+            }
+            issue.style.display = 'inline-block';
+            returnservicebutton.style.display = 'none'
+            let servicebutton = document.getElementById(`servicebutton${data[i].assetId}`)
+            servicebutton.style.display = 'inline-block'
+        }
+        else if (data[i].transaction == 'Scrapped' && data[i].assetId != null) {
+            let returnservicebutton = document.getElementById(`returnservicebutton${data[i].assetId}`)
+            var issue = document.getElementById(`assetissue${data[i].assetId}`);
+            if(issue==null){
+                continue;
+            }
+            issue.style.display = 'none';
+            returnservicebutton.style.display = 'none'
+            let servicebutton = document.getElementById(`servicebutton${data[i].assetId}`)
+            servicebutton.style.display = 'none'
         }
     }
     scrapmode();
@@ -140,7 +186,6 @@ async function buttonhide() {
 async function scrapmode() {
     var response = await fetch('/asset/scrap/status')
     var data = await response.json();
-
     for (let i = 0; i < data.data.length; i++) {
         if (data.data[i].scrapstatus == "Inactive") {
             var issue = document.getElementById(`assetissue${data.data[i].id}`);
@@ -154,21 +199,6 @@ async function scrapmode() {
         }
     }
 }
-async function activeinactive() {
-    var customFilter = document.getElementById('customFilter').value;
-    console.log(customFilter);
-    var id = await fetch('/fetching/assetdetails/filter', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: `{"status":"${customFilter}"}`
-    })
-    var employeesdata = await id.json();
-    console.log(employeesdata);
-    assettable.clear().draw();
-    assettable.rows.add(employeesdata); // Add new data
-    assettable.columns.adjust().draw(); // Redraw the DataTable
-}
-
 async function editdisplay(id) {
     try {
         var response = await fetch('/asset/details/view', {
@@ -177,7 +207,6 @@ async function editdisplay(id) {
             body: JSON.stringify({ id: id })
         })
         var data = await response.json();
-        // console.log("data", data.data);
         var serial_no = document.querySelector('#editserial_no').value = data.data.serial_no
         var name = document.querySelector('#editassetname').value = data.data.name
         var model = document.querySelector('#editmodel').value = data.data.model
@@ -214,16 +243,17 @@ async function history(id) {
         body: JSON.stringify({ id: id })
     })
     var data = await response.json()
-    console.log(data);
     if (data.message != 'false') {
         var historyassetinputtable = document.getElementById('historyassetinputtable')
-        historyassetinputtable.innerHTML = `<tr><th>Id</th><th>Employee id</th> <th>Transaction</th> <th> Issue to</th> <th> Date</th> <th> Remarks</th> </tr>`;
+        historyassetinputtable.innerHTML = `<th>S.No</th><th>Employee id</th> <th>Transaction</th> <th>Employee</th> <th> Date</th> <th> Remarks</th>`;
         for (let i in data) {
-            if (data[i].reason == null)
-                reason = 'NA';
-            else
-                reason = data[i].reason
-            historyassetinputtable.innerHTML += `<tr> <td>${data[i].id}</td><td>${data[i].employeeId} </td><td>${data[i].transaction}</td> <td>${data[i].issueto}</td> <td>${moment(data[i].issuedate).format('DD/MM/YYYY')}</td> <td>${reason}</td> </tr>`
+            if (data[i].reason == null) reason = 'NA';
+            else reason = data[i].reason
+            if (data[i].employeeId == null) employeeId = 'NA';
+            else employeeId = data[i].employeeId
+            if (data[i].issueto == null) employee = 'NA';
+            else employee = data[i].issueto
+            historyassetinputtable.innerHTML += `<tr> <td>${i} </td><td>${employeeId} </td><td>${data[i].transaction}</td> <td>${employee}</td> <td>${moment(data[i].issuedate).format('DD/MM/YYYY')}</td> <td>${reason}</td> </tr> `
         }
     }
     else {
@@ -253,20 +283,21 @@ async function issueasset() {
     var id = sessionStorage.getItem('assetid');
     var issueassetname = document.querySelector('#issueassetname').value;
     var select = document.getElementById('issueassetname');
-var selected = select.options[select.selectedIndex];
-var employeeid = selected.getAttribute('employeeid');
+    var selected = select.options[select.selectedIndex];
+    var EmployeeId = selected.getAttribute('employeeid');
     var issueassetdate = document.querySelector('#issueassetdate').value;
     var assetissuereason = document.getElementById('assetissuereason').value;
-console.log(id);
+    console.log(id);
     var response = await fetch('/asset/issue', {
         method: 'POST',
-        headers: { 'content-type': 'application/json'
-     },
-        body: JSON.stringify({ employeeid: employeeid, issueto: issueassetname, issuedate: issueassetdate, assetid: id, transaction: 'Issue', reason: assetissuereason })
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify({ EmployeeId: EmployeeId, issueto: issueassetname, issuedate: issueassetdate, AssetId: id, reason: assetissuereason })
     })
     var data = await response.json();
     alert(data.message);
-    location.reload();
+    // location.reload();
 }
 
 async function returnview(id) {
@@ -288,7 +319,11 @@ async function returnasset() {
     var issueassetname = document.querySelector('#returnassetname').innerHTML;
     var returnassetdate = document.getElementById('returnassetdate').value
     var assetreason = document.getElementById('assetreason').value;
-    console.log("name", issueassetname);
+    let Today=new Date()
+    const CheckingSevenDaysAgo=new Date(Today)
+    // CheckingSevenDaysAgo.setDate(Today.getDate()-7)
+    // if(returnassetdate>CheckingSevenDaysAgo&& returnassetdate<=Today){
+    // console.log(CurrentDate);
     var response = await fetch('/asset/return/submit', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
@@ -296,7 +331,12 @@ async function returnasset() {
     })
     var data = await response.json();
     alert(data.message)
-    location.reload();
+    // location.reload();
+    // }
+    // else{
+        // alert('The Due Date Exists ')
+    // }
+   
 }
 function scrapview(id) {
     sessionStorage.setItem('scrapid', id)
@@ -309,32 +349,104 @@ async function scrap() {
         var response = await fetch('/asset/scrap/', {
             method: 'POST',
             headers: { 'content-type': 'application/json' },
-            body: `{"id":"${id}","reason":"${reason}","date":"${date}","transaction":"Scrap"}`
+            body: `{"id":"${id}","reason":"${reason}","date":"${date}"}`
         })
         var data = await response.json();
         alert(data.message);
         console.log(data);
-        window.location.reload();
+        // window.location.reload();
     }
 }
 function serviceview(id) {
     sessionStorage.setItem('serviceid', id);
 }
-async function service() {
-    var id = sessionStorage.getItem('serviceid');
-    var fromdate = document.getElementById('servicefromdate').value;
-    var todate = document.getElementById('servicetodate').value;
-    var reason = document.getElementById('servicereason').value;
+async function service(val) {
+    if (val == 'servicedate') {
+        var id = sessionStorage.getItem('serviceid');
+        var fromdate = document.getElementById('servicefromdate').value;
+        var reason = document.getElementById('servicereason').value;
 
-    if (confirm('Do you want to Service a asset') == true) {
-        var response = await fetch('/asset/service/', {
+        if (confirm('Do you want to Service a asset') == true) {
+
+            let returnservicebutton = document.getElementById('returnservicebutton' + id)
+            returnservicebutton.style.display = "inline-block"
+
+            var response = await fetch('/asset/service/', {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: `{"id":"${id}","reason":"${reason}","date":"${fromdate}","transaction":"Service"}`
+            })
+            var data = await response.json();
+            alert(data.message);
+            console.log('data', data);
+            // window.location.reload();
+
+        }
+    }
+    // return date
+    if (val == 'returndate') {
+        var id = sessionStorage.getItem('serviceid');
+        var returndate = document.getElementById('servicereturndate').value;
+        var reason = document.getElementById('servicereturnreason').value;
+        if (confirm('Do you want to Return a asset') == true) {
+            var response = await fetch('/asset/service/return', {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: `{"id":"${id}","reason":"${reason}","date":"${returndate}"}`
+            })
+            var data = await response.json();
+            alert(data.message);
+            console.log('data', data);
+            // window.location.reload();
+        }
+    }
+}
+// category filter list view
+Categoryfilter()
+async function Categoryfilter(){
+    let response= await fetch('/fetching/asset/type')
+    let data=await response.json()
+    let CategoryFilter=document.getElementById('CategoryFilter')
+    if(data.message)
+        alert(data.message)
+    CategoryFilter.innerHTML=`<option value="None">All</option>`
+    for(let i in data.data){
+        CategoryFilter.innerHTML+=`<option value='${data.data[i].name}'>${data.data[i].name}</option>`
+    }
+   
+}
+async function Filter(val) {
+    var StatusFilter = document.getElementById('StatusFilter').value;
+    var CategoryFilter = document.getElementById('CategoryFilter').value;
+    if (StatusFilter!='None') {
+       
+        var id = await fetch('/fetching/assetdetails/statusfilter', {
             method: 'POST',
             headers: { 'content-type': 'application/json' },
-            body: `{"id":"${id}","reason":"${reason}","fromdate":"${fromdate}","todate":"${todate}","transaction":"Service"}`
+            body: `{"status":"${StatusFilter}"}`
         })
-        var data = await response.json();
-        alert(data.message);
-        console.log('data', data);
-        window.location.reload();
+        var employeesdata = await id.json();
+        console.log(employeesdata);
+        
+        assettable.clear().draw();
+        assettable.rows.add(employeesdata); // Add new data
+        assettable.columns.adjust().draw(); // Redraw the DataTable
+        
     }
+   else if (CategoryFilter!='None') {
+        var id = await fetch('/fetching/assetdetails/categoryfilter', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: `{"status":"${CategoryFilter}"}`
+        })
+        var employeesdata = await id.json();
+        console.log(employeesdata);
+        
+        assettable.clear().draw();
+        assettable.rows.add(employeesdata); // Add new data
+        assettable.columns.adjust().draw(); // Redraw the DataTable
+        // buttonhide();
+        // 
+    }
+    buttonhide()
 }

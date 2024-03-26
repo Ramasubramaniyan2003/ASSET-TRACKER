@@ -1,61 +1,101 @@
-.addasset{
+.addasset {
     float: right;
 }
-.dt-buttons button{
+
+.dt-buttons button {
     border-radius: 5px;
     height: 37px;
     margin-bottom: 10px;
     width: 70px;
 }
-.buttons-copy{
+
+.buttons-copy {
     /* background-color: rgb(12, 12, 181);
     color: white; */
     border: none;
 }
-.buttons-excel{
+
+.buttons-excel {
     /* background-color: #006600;
     color: white; */
     border: none;
     /* margin-left: 10px; */
 }
-.buttons-pdf{
+
+.buttons-pdf {
     /* background-color: #b30000;
     color: white; */
     border: none;
     /* margin-left: 10px; */
 }
-#issueassetname,#issueassetdate,.assetinputtable input,#editscrapstatus,.returnassetinputtable input,.serviceinputtable input,.scrapassetinputtable input{
-width: 250px;
-height: 35px;
-padding-left:10px;
-padding-right:5px ;
-border-radius: 5px;
+
+#issueassetname,
+#issueassetdate,
+.assetinputtable input,
+#editscrapstatus,
+.returnassetinputtable input,
+.serviceinputtable input,
+.scrapassetinputtable input {
+    width: 250px;
+    height: 35px;
+    padding-left: 10px;
+    padding-right: 5px;
+    border-radius: 5px;
 }
-.issueassetinputtable,.assetinputtable,.returnassetinputtable,.serviceinputtable,.scrapassetinputtable{
-    display:grid;
+
+.issueassetinputtable,
+.assetinputtable,
+.returnassetinputtable,
+.serviceinputtable,
+.scrapassetinputtable {
+    display: grid;
     justify-content: center;
 }
-.hidden{
+
+.hidden {
     display: none;
 }
-.btn-size{
+
+.btn-size {
     font-size: 12px;
-    padding:5px 10px;
+    padding: 5px 10px;
 }
-#customFilter{
+
+.filter select {
     height: 33px;
     width: 200px;
-    padding:5px;
-   
+    padding: 5px;
+
 }
-.custom-cls button{
+
+.custom-cls button {
     position: relative;
-    top:-5px;
+    top: -5px;
     margin-left: 10px;
-  } 
-  .assetinputtable input,.assetinputtable select{
+}
+
+.assetinputtable input,
+.assetinputtable select {
     width: 250px;
     height: 33px;
     margin-top: 5px;
-  }
- 
+}
+
+.filter button {
+    position: relative;
+    top: -5px;
+    margin-left: 10px;
+}
+#historyassetmodalId{
+    height: 70vh;
+}
+/* .historyassetinputtable{
+    ::-webkit-scrollbar-thumb
+
+} */
+::-webkit-scrollbar-thumb{
+    /* right: 100px; */
+    position: relative;
+    left: 100px;
+    width: 50px;
+}

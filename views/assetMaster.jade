@@ -8,251 +8,285 @@ html(lang="en")
         link(rel="stylesheet", href="/css/assetMaster.css")
         link(href="https://cdn.datatables.net/v/bs5/dt-2.0.1/datatables.min.css" rel="stylesheet")
 
-    body 
-    include ./sidebar.jade
-        i.fa.menubar#menubar(onclick="menu()" style="font-size:24px")&#xf0c9;
-        .container-fluid
-            .row.mt-3
-                .col-sm-3
-                    h3.employeetopic Assets
-                .col-sm-9
-                    a.addasset.btn.btn-primary(type="button" data-bs-toggle="modal" data-bs-target="#assetmodalId" onclick="addasset()")  Add Asset
-            .modal.fade#assetmodalId(tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true")
-                .modal-dialog.modal-lg(role="document")
-                    .modal-content
-                        .modal-header
-                            h5.modal-title#modalTitleId
-                                Modal Add Asset 
-                            button(type="button" data-bs-dismiss="modal" aria-label="Close").btn-close
-                        .modal-body    
-                             table.mt-3.assetinputtable
-                                tr 
-                                    th 
-                                        p(for="assetname") Asset name
-                                    td 
-                                        input.ps-3.ms-3(type="text" name="name"  id="assetname" placeholder="Dell" )       
-                                tr
-                                    th
-                                        p(for="asset type" ).mt-4 Category
-                                    td 
-                                        select#assettype.ps-3.ms-3.mt-3(name='asset type' placeholder="Asset category")       
-                                tr
-                                    th
-                                        p(for="serial_no" ).mt-4 Serial no
-                                    td 
-                                        input.ps-3.ms-3.mt-3(type="text" name="serial_no" id="serial_no"   )
-                                tr 
-                                    th 
-                                        p(for="model").mt-4 Model
-                                    td 
-                                        input.ps-3.ms-3.mt-3(type="text" name="model" id="model"  )    
-                                tr 
-                                    th 
-                                        p(for="make").mt-4 Make
-                                    td 
-                                        input.ps-3.ms-3.mt-3(type="text" id="make" )       
-                                tr 
-                                    th 
-                                        p(for="scrapstatus").mt-4 Scrap status
-                                    td 
-                                        select.ps-3.ms-3.mt-3#scrapstatus(name='scrapstatus')
-                                            option(value="Active") Active
-                                            option(value="Inactive") Inactive
-                        .modal-footer.mt-3
-                            button.btn.btn-danger(aria-label="Close" data-bs-dismiss="modal") Cancel 
-                            button.btn.btn-success#addasset Add
 
-             //edit
-            .modal.fade#editassetmodalId(tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true")
-                .modal-dialog.modal-none(role="document")
-                    .modal-content
-                        .modal-header
-                            h5.modal-title#modalTitleId
-                                Modal Edit Asset 
-                            button(type="button" data-bs-dismiss="modal" aria-label="Close").btn-close
-                        .modal-body    
-                             table.mt-2.assetinputtable
-                                tr 
-                                    th 
-                                        p(for="editassetname").mt-3 Asset name
-                                    td 
-                                        input.ms-3(type="text" name="name"  id="editassetname" placeholder="Laptop" )
-                                tr
-                                    th
-                                        p(for="serial_no" ).mt-4 Serial no
-                                    td 
-                                        input.ms-3.mt-3(type="text" name="serial_no" id="editserial_no" placeholder="9898 43434 2322"  )
-                                tr 
-                                    th 
-                                        p(for="model").mt-4 Model
-                                    td 
-                                        input.ms-3.mt-3(type="text" name="model" id="editmodel" placeholder="9876543210" )    
-                                tr 
-                                    th 
-                                        p(for="make").mt-4 Make
-                                    td 
-                                        input.ms-3.mt-3(type="text" id="editmake" placeholder="make")       
-                                tr 
-                                    th 
-                                        p(for="scrapstatus").mt-4 Scrapstatus
-                                    td 
-                                        select#editscrapstatus.ms-3.mt-3(name='scrapstatus')
-                                            option(value="Active") Active
-                                            option(value="Inactive") Inactive 
-                        .modal-footer
-                            button.btn.btn-danger(aria-label="Close" data-bs-dismiss="modal") Cancel 
-                            button.btn.btn-success#addasset(onclick="edit()") Edit
-            //Issue asset
-            .modal.fade#issueassetmodalId(tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true")
+    body
+        include ./sidebar.jade
+            include ./layout.jade   
+            .container-fluid
+         
+                .row.mt-3
+                    .col-sm-3
+                        h3.employeetopic Assets
+                    .col-sm-9
+                        a.addasset.btn.btn-primary(type="button" data-bs-toggle="modal" data-bs-target="#assetmodalId" onclick="addasset()")  Add Asset
+                .modal.fade#assetmodalId(tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true")
+                    .modal-dialog.modal-lg(role="document")
+                        .modal-content
+                            .modal-header
+                                h5.modal-title#modalTitleId
+                                    Modal Add Asset 
+                                button(type="button" data-bs-dismiss="modal" aria-label="Close").btn-close
+                            .modal-body    
+                                table.mt-3.assetinputtable
+                                    tr 
+                                        th 
+                                            p(for="assetname") Asset name
+                                        td 
+                                            input.ps-3.ms-3(type="text" name="name"  id="assetname")       
+                                    tr
+                                        th
+                                            p(for="asset type" ).mt-4 Category
+                                        td 
+                                            select#assettype.ps-3.ms-3.mt-3(name='asset type' placeholder="Asset category")       
+                                    tr
+                                        th
+                                            p(for="serial_no" ).mt-4 Serial no
+                                        td 
+                                            input.ps-3.ms-3.mt-3(type="text" name="serial_no" id="serial_no"   )
+                                    tr 
+                                        th 
+                                            p(for="model").mt-4 Model
+                                        td 
+                                            input.ps-3.ms-3.mt-3(type="text" name="model" id="model"  )    
+                                    tr 
+                                        th 
+                                            p(for="make").mt-4 Make
+                                        td 
+                                            input.ps-3.ms-3.mt-3(type="text" id="make" )       
+                                    tr 
+                                        th 
+                                            p(for="scrapstatus").mt-4 Scrap status
+                                        td 
+                                            select.ps-3.ms-3.mt-3#scrapstatus(name='scrapstatus')
+                                                option(value="Active") Active
+                                                option(value="Inactive") Inactive
+                            .modal-footer.mt-3
+                                button.btn.btn-danger(aria-label="Close" data-bs-dismiss="modal") Cancel 
+                                button.btn.btn-success#addasset Add
+
+                //edit
+                .modal.fade#editassetmodalId(tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true")
                     .modal-dialog.modal-none(role="document")
                         .modal-content
                             .modal-header
                                 h5.modal-title#modalTitleId
-                                    Modal Issue Asset 
+                                    Modal Edit Asset 
                                 button(type="button" data-bs-dismiss="modal" aria-label="Close").btn-close
                             .modal-body    
-                                table.issueassetinputtable
+                                table.mt-2.assetinputtable
                                     tr 
                                         th 
-                                            p(for="issueassetname").mt-3 Employee
+                                            p(for="editassetname").mt-3 Asset name
                                         td 
-                                            select#issueassetname.ms-2(name="issueassetname") 
+                                            input.ms-3(type="text" name="name"  id="editassetname" placeholder="Laptop" )
+                                    tr
+                                        th
+                                            p(for="serial_no" ).mt-4 Serial no
+                                        td 
+                                            input.ms-3.mt-3(type="text" name="serial_no" id="editserial_no" placeholder="9898 43434 2322"  )
                                     tr 
                                         th 
-                                            p(for="issueassetdate").mt-3 Issue date
+                                            p(for="model").mt-4 Model
                                         td 
-                                            input.ms-2#issueassetdate(type="date" name="issueassetdate")
+                                            input.ms-3.mt-3(type="text" name="model" id="editmodel" placeholder="9876543210" )    
                                     tr 
                                         th 
-                                            label(for="assetissuereason").mt-3 Reason
+                                            p(for="make").mt-4 Make
                                         td 
-                                            textarea#assetissuereason.ms-2.mt-3(name="assetissuereason", cols="31", rows="2" placeholder="@comment" required) 
+                                            input.ms-3.mt-3(type="text" id="editmake" placeholder="make")       
+                                    tr 
+                                        th 
+                                            p(for="scrapstatus").mt-4 Scrapstatus
+                                        td 
+                                            select#editscrapstatus.ms-3.mt-3(name='scrapstatus')
+                                                option(value="Active") Active
+                                                option(value="Inactive") Inactive 
                             .modal-footer
                                 button.btn.btn-danger(aria-label="Close" data-bs-dismiss="modal") Cancel 
-                                button.btn.btn-success#addasset(onclick="issueasset('issue')") Issue
-            //history button
-            .modal.fade#historyassetmodalId(tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true")
-                    .modal-dialog.modal-xl(role="document")
-                        .modal-content
-                            .modal-header
-                                h5.modal-title#modalTitleId
-                                    Modal Asset history 
-                                button(type="button" data-bs-dismiss="modal" aria-label="Close").btn-close
-                            .modal-body    
-                                table.historyassetinputtable.table.table-bordered#historyassetinputtable
-                                    tr 
-                                        th Id
-                                        th Employee
-                                        th Issue date
-                                        th Return date 
-                                        th Reason
-                                     
-            //return asset
+                                button.btn.btn-success#addasset(onclick="edit()") Edit
+                //Issue asset
+                .modal.fade#issueassetmodalId(tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true")
+                        .modal-dialog.modal-none(role="document")
+                            .modal-content
+                                .modal-header
+                                    h5.modal-title#modalTitleId
+                                        Modal Issue Asset 
+                                    button(type="button" data-bs-dismiss="modal" aria-label="Close").btn-close
+                                .modal-body    
+                                    table.issueassetinputtable
+                                        tr 
+                                            th 
+                                                p(for="issueassetname").mt-3 Employee
+                                            td 
+                                                select#issueassetname.ms-2(name="issueassetname") 
+                                        tr 
+                                            th 
+                                                p(for="issueassetdate").mt-3 Date
+                                            td 
+                                                input.ms-2#issueassetdate(type="date" name="issueassetdate")
+                                        tr 
+                                            th 
+                                                label(for="assetissuereason").mt-3 Reason
+                                            td 
+                                                textarea#assetissuereason.ms-2.mt-3(name="assetissuereason", cols="31", rows="2" placeholder="@comment" required) 
+                                .modal-footer
+                                    button.btn.btn-danger(aria-label="Close" data-bs-dismiss="modal") Cancel 
+                                    button.btn.btn-success#addasset(onclick="issueasset('issue')") Issue
+                //history button
+                .modal.fade#historyassetmodalId(tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true")
+                        .modal-dialog.modal-xl(role="document")
+                            .modal-content
+                                .modal-header
+                                    h5.modal-title#modalTitleId
+                                        Modal Asset history 
+                                    button(type="button" data-bs-dismiss="modal" aria-label="Close").btn-close
+                                .modal-body    
+                                    table.historyassetinputtable.table.table-hover.table-bordered#historyassetinputtable(style="overflowX:auto")
+                                        th S_no
+                                        th Employee Id
+                                        
+                                        
+                //return asset
+                
+                .modal.fade#returnassetmodalId(tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true")
+                        .modal-dialog.modal-none(role="document")
+                            .modal-content
+                                .modal-header
+                                    h5.modal-title#modalTitleId
+                                        Modal Return Asset 
+                                    button(type="button" data-bs-dismiss="modal" aria-label="Close").btn-close
+                                .modal-body    
+                                    table.returnassetinputtable
+                                        tr 
+                                            th 
+                                                p(for="returnassetname").mt-3.me-5 From
+                                            td#returnassetname    
+                                        tr 
+                                            th 
+                                                p(for="issueassetdateinreturn").mt-3.me-5 Issue date
+                                            td#issueassetdateinreturn
+                                        tr 
+                                            th 
+                                                P(for="returnassetdate").mt-4 Date 
+                                            td
+                                                input(type="date" name="returnassetdate" required)#returnassetdate.mt-3
+                                        tr 
+                                            th 
+                                                label(for="assetreason").mt-4 Reason
+                                            td 
+                                                textarea#assetreason(name="assetreason", cols="30", rows="2" placeholder="@comment" required).mt-3 
+
+
+                                .modal-footer
+                                    button.btn.btn-danger(aria-label="Close" data-bs-dismiss="modal") Cancel 
+                                    button.btn.btn-success#addasset(onclick="returnasset()" type="submit") Return                  
+                //scrap
+                .modal.fade#scrapassetmodalId(tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true")
+                        .modal-dialog.modal-none(role="document")
+                            .modal-content
+                                .modal-header
+                                    h5.modal-title#modalTitleId
+                                        Modal Scrap Asset 
+                                    button(type="button" data-bs-dismiss="modal" aria-label="Close").btn-close
+                                .modal-body    
+                                    table.scrapassetinputtable
+                                        tr 
+                                            th 
+                                                P(for="scrapassetdate").mt-4 Date 
+                                            td
+                                                input.ms-1(type="date" name="scrapassetdate" required)#scrapassetdate.mt-3
+                                        tr 
+                                            th 
+                                                p(for="scrapassetreason").mt-4 Reason
+                                            td 
+                                                textarea#scrapassetreason.ms-2(name="scrapassetreason", cols="30", rows="2" placeholder="@comment" required).mt-3 
+
+
+                                .modal-footer
+                                    button.btn.btn-danger(aria-label="Close" data-bs-dismiss="modal") Cancel 
+                                    button.btn.btn-success#addasset(onclick="scrap()" type="submit") Ok       
             
-            .modal.fade#returnassetmodalId(tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true")
-                    .modal-dialog.modal-none(role="document")
-                        .modal-content
-                            .modal-header
-                                h5.modal-title#modalTitleId
-                                    Modal Return Asset 
-                                button(type="button" data-bs-dismiss="modal" aria-label="Close").btn-close
-                            .modal-body    
-                                table.returnassetinputtable
-                                    tr 
-                                        th 
-                                            p(for="returnassetname").mt-3.me-5 From
-                                        td#returnassetname    
-                                    tr 
-                                        th 
-                                            p(for="issueassetdateinreturn").mt-3.me-5 Issue date
-                                        td#issueassetdateinreturn
-                                    tr 
-                                        th 
-                                            P(for="returnassetdate").mt-4 Return date 
-                                        td
-                                            input(type="date" name="returnassetdate" required)#returnassetdate.mt-3
-                                    tr 
-                                        th 
-                                            label(for="assetreason").mt-4 Reason
-                                        td 
-                                            textarea#assetreason(name="assetreason", cols="30", rows="2" placeholder="@comment" required).mt-3 
-
-
-                            .modal-footer
-                                button.btn.btn-danger(aria-label="Close" data-bs-dismiss="modal") Cancel 
-                                button.btn.btn-success#addasset(onclick="returnasset()" type="submit") Return                  
-            //scrap
-            .modal.fade#scrapassetmodalId(tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true")
-                    .modal-dialog.modal-none(role="document")
-                        .modal-content
-                            .modal-header
-                                h5.modal-title#modalTitleId
-                                    Modal Scrap Asset 
-                                button(type="button" data-bs-dismiss="modal" aria-label="Close").btn-close
-                            .modal-body    
-                                table.scrapassetinputtable
-                                    tr 
-                                        th 
-                                            P(for="scrapassetdate").mt-4 Date 
-                                        td
-                                            input.ms-1(type="date" name="scrapassetdate" required)#scrapassetdate.mt-3
-                                    tr 
-                                        th 
-                                            p(for="scrapassetreason").mt-4 Reason
-                                        td 
-                                            textarea#scrapassetreason.ms-2(name="scrapassetreason", cols="30", rows="2" placeholder="@comment" required).mt-3 
-
-
-                            .modal-footer
-                                button.btn.btn-danger(aria-label="Close" data-bs-dismiss="modal") Cancel 
-                                button.btn.btn-success#addasset(onclick="scrap()" type="submit") Ok       
-        
-            //service
-            .modal.fade#serviceassetmodalId(tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true")
-                    .modal-dialog.modal-none(role="document")
-                        .modal-content
-                            .modal-header
-                                h5.modal-title#modalTitleId
-                                    Modal Service
-                                button(type="button" data-bs-dismiss="modal" aria-label="Close").btn-close
-                            .modal-body    
-                                table.serviceinputtable
-                                    tr 
-                                        th 
-                                            P(for="servicefromdate").mt-4 From  
-                                        td
-                                            input.p-3.ms-1(type="date" name="servicefromdate" required)#servicefromdate.mt-3
-                                     tr 
-                                        th 
-                                            P(for="servicetodate").mt-4 To 
-                                        td
-                                            input.p-3.ms-1(type="date" name="servicetodate" required)#servicetodate.mt-3
-                                    tr 
-                                        th 
-                                            p(for="scrapassetreason").mt-4 Reason
-                                        td 
-                                            textarea#servicereason.p-3.ms-2(name="scrapassetreason", cols="30", rows="2" placeholder="@comment" required).mt-3 
-
-
-                            .modal-footer
-                                button.btn.btn-danger(aria-label="Close" data-bs-dismiss="modal") Cancel 
-                                button.btn.btn-success#addasset(onclick="service()" type="submit") Ok 
-            .custom-cls.mt-5
-                label(style="font-size:20px") Status: 
-                select.ms-1#customFilter.ps-2
-                    option(value="Inactive")   Inactive
-                    option(value="Active") Active
-                button.btn.btn-primary(onclick="activeinactive()") Filter 
-            table#assettable.assettable.mt-1.table.table-bordered
-                thead
-                    th ID
-                    th Serial no
-                    th Name 
-                    th Model
-                    th Make
-                    th Category
-                    th Scrap status
-                    th Action 
+                //service
+                .modal.fade#serviceassetmodalId(tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true")
+                        .modal-dialog.modal-none(role="document")
+                            .modal-content
+                                .modal-header
+                                    h5.modal-title#modalTitleId
+                                        Modal Service
+                                    button(type="button" data-bs-dismiss="modal" aria-label="Close").btn-close
+                                .modal-body    
+                                    table.serviceinputtable
+                                        tr 
+                                            th 
+                                                P(for="servicefromdate").mt-4 Date 
+                                            td
+                                                input.p-3.ms-1(type="date" name="servicefromdate" required)#servicefromdate.mt-3
+                                        //-  tr 
+                                        //-     th 
+                                        //-         P(for="servicetodate").mt-4 To 
+                                        //-     td
+                                        //-         input.p-3.ms-1(type="date" name="servicetodate" required)#servicetodate.mt-3
+                                        tr 
+                                            th 
+                                                p(for="scrapassetreason").mt-4 Reason
+                                            td 
+                                                textarea#servicereason.p-3.ms-2(name="scrapassetreason", cols="30", rows="2" placeholder="@comment" required).mt-3 
+                                .modal-footer
+                                    button.btn.btn-danger(aria-label="Close" data-bs-dismiss="modal") Cancel 
+                                    button.btn.btn-success#addasset(onclick="service('servicedate')" type="submit") Ok 
+                //return service
+                .modal.fade#returnserviceassetmodalId(tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true")
+                        .modal-dialog.modal-none(role="document")
+                            .modal-content
+                                .modal-header
+                                    h5.modal-title#modalTitleId
+                                        Modal Return Service
+                                    button(type="button" data-bs-dismiss="modal" aria-label="Close").btn-close
+                                .modal-body    
+                                    table.serviceinputtable
+                                        tr 
+                                            th 
+                                                P(for="servicereturndate").mt-4 Date 
+                                            td
+                                                input.p-3.ms-1(type="date" name="servicereturndate" required)#servicereturndate.mt-3
+                                        tr 
+                                            th 
+                                                p(for="scrapassetreason").mt-4 Book Mark
+                                            td 
+                                                textarea#servicereturnreason.p-3.ms-2(name="servicereturnreason", cols="30", rows="2" placeholder="@comment" required).mt-3 
+                                .modal-footer
+                                    button.btn.btn-danger(aria-label="Close" data-bs-dismiss="modal") Cancel 
+                                    button.btn.btn-success#addasset(onclick="service('returndate')" type="submit") Ok 
+                .filter.mt-5
+                    .row 
+                        .col-sm-auto
+                            tr 
+                                td
+                                    label(style="font-size:17px") Status 
+                                td
+                                    select.ms-1#StatusFilter.ps-2
+                                        option(value="None") All
+                                        option(value="Inactive") Inactive
+                                        option(value="Active") Active
+                                    //- button.btn.btn-primary(onclick="Filter('StatusFilter')") Filter 
+                        .col-sm-auto
+                            tr
+                                td
+                                    label(style="font-size:17px") Category 
+                                td
+                                    select.ms-1#CategoryFilter.ps-2
+                                        
+                                    button.btn.btn-primary(onclick="Filter('CategoryFilter')") Filter 
+                table#assettable.assettable.mt-1.table.table-bordered
+                    thead
+                        th ID
+                        th Serial no
+                        th Name 
+                        th Model
+                        th Make
+                        th Category
+                        th Status
+                        th Action 
                 
 script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js")
 script(src="https://code.jquery.com/jquery-3.6.0.min.js")
@@ -269,7 +303,8 @@ script(src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.print.min.js")
 script(src="/bootstrap-5.0.2-dist/bootstrap-5.0.2-dist/js/bootstrap.min.js")
 script(src='/bootstrap-5.0.2-dist/bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js')
 script(src="/js/moment.js")
+//- script(src="/js/sidebar.js")
 script(src="/js/assetMaster.js")
-script(src="/js/sidebar.js")
+
 
         

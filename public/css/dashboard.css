@@ -22,10 +22,11 @@
 .assetcategorydash{
     visibility: hidden;
 }
-/* .cards{
+.cards{
     display: flex;
-   justify-content: space-between; 
-} */
+   /* justify-content:center;  */
+   justify-content:space-evenly;
+}
 /* #assets{
     position:flex;
     

@@ -2,16 +2,18 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
-var multer = require('multer');
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 const bodyParser = require('body-parser');
 const { assetMaster, Admin, assetCategory, employees, assetHistory } = require('./models/index');
+const { Op } = require('./config/db')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-
-
 var app = express();
+const fs = require('fs')
+const employeeRouter = require('./routes/Employee')
+const Assets = require('./routes/Assets')
+const AssetCategory = require('./routes/AssetCategory')
+
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -20,19 +22,11 @@ const isAuthenticate = (req, res, next) => {
     var tokenverify = jwt.verify(auth, 'Assettracker', (err, token) => {
         if (err) {
             res.json({ 'message': "unauthorized" })
-            res.redirect('/');
+            // res.redirect('/');
         }
         next();
     })
 }
-
-// file upload path
-const storage = multer.diskStorage({
-    destination: 'images/',
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + "-" + file.filename);
-    }
-})
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -45,7 +39,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.get('/newlogin', (req, res) => {
+    res.sendFile(path.join(__dirname, 'loginexample.html'))
+})
+app.get('/newlogin1', (req, res) => {
+    res.render('newlogin')
+})
 app.get('/', (req, res) => {
     res.render('login');
 })
@@ -53,7 +52,10 @@ app.get('/', (req, res) => {
 app.get('/dashboard', (req, res) => {
     res.render('dashboard');
 })
-
+// employee
+app.use('/employee', employeeRouter)
+app.use('/asset', Assets)
+app.use('/asset-category', AssetCategory)
 // admin login
 app.post("/login", async (req, res, next) => {
     const { username, password } = req.body;
@@ -69,172 +71,12 @@ app.post("/login", async (req, res, next) => {
         }
     }
     catch (e) {
+        console.log(e);
         return res.json({ "success": false, "message": "db error" });
     }
 })
-// employee page employee master
-app.get('/employee', (req, res) => {
-    return res.render('employee');
-})
 
-//employee register page
-app.get('/employee/register', (req, res) => {
-    res.render('employeeRegister');
-})
-const uploadfile = multer({ storage: storage }).single('employeeimage');
-
-//storing employee details
-app.post('/employee/register/submit', uploadfile, async (req, res) => {
-    const { name, email, contact, address, branch, joindate, enddate, salary, department, status } = req.body;
-    try {
-        const employeeinsert = await employees.create({ name: name, email: email, contact: contact, branch: branch, address: address, joinDate: joindate, endDate: enddate, salary: salary, photo: null, department: department, status })
-        if (!req.file) {
-            console.log("file not uploaded");
-        }
-        else {
-            console.log(req.file.fieldname, "file uploaded");
-        }
-        return res.send({ success: true });
-    }
-    catch (e) {
-        console.log(e);
-        return res.send({ success: false });
-    }
-})
-// add asset category
-app.post('/asset-category/add', async (req, res) => {
-    try {
-        const { asset } = req.body;
-        const assetcategoryinsert = await assetCategory.create({ name: asset });
-        return res.json({ "message": "Asset created" });
-    }
-    catch (e) {
-        console.log("errorrr", e);
-        return res.json({ "message": "error adding assetcategory" })
-    }
-})
-// add assets
-app.post('/asset/add', async (req, res) => {
-    try {
-        const { assetname, serial_no, model, make, scrapstatus, assettype, assetcategoryid } = req.body;
-        const asset = await assetMaster.create({ name: assetname, serial_no: serial_no, model: model, make: make, scrapstatus: scrapstatus, type: assettype, assetcategoryId: assetcategoryid })
-        if (asset)
-            return res.json({ "message": "Asset Added" })
-        else
-            return res.json({ "message": "error happend!" })
-    }
-    catch (e) {
-        console.log(e);
-        return res.json({ "message": "Already exists" })
-    }
-})
-
-// issue asset 
-app.post('/asset/issue', async (req, res) => {
-    try {
-        const { employeeid, issueto, issuedate, assetid, transaction, reason } = req.body;
-        const asset = await assetHistory.create({ issueto: issueto, issuedate: issuedate, assetId: assetid, transaction: transaction, reason: reason,employeeId:employeeid });
-        if (asset)
-            return res.json({ "message": "Asset issued!" });
-        else
-            return res.json({ 'message': 'Employee undefined' })
-    }
-    catch (e) {
-        console.log(e);
-        return res.json({ "message": "Enter a Values!!" });
-    }
-})
-// history asset
-app.post('/asset/history', async (req, res) => {
-    try {
-        const { id } = req.body
-        const history = await assetHistory.findAll({ where: { assetId: id } });
-        console.log('history',history);
-        if (history)
-            return res.send(history)
-        else {
-            return res.json({ "message": "false" })
-        }
-    }
-    catch (e) {
-        console.log(e);
-        res.json({ 'message': 'error in searching' })
-    }
-})
-// return asset 
-app.post('/asset/return', async (req, res) => {
-    try {
-        const { id } = req.body;
-        const returnasset = await assetHistory.findOne({ attributes: ['issueto', 'issuedate'], where: { assetId: id }, order: [['id', 'DESC']] });
-        if (returnasset)
-            return res.json({ "message": "sucess", "data": returnasset });
-        else {
-            return res.json({ "message": "Invalid Asset" });
-        }
-    }
-    catch (e) {
-        console.log(e);
-        return res.json({ "message": "Invalid Asset" });
-    }
-})
-// scrap asset
-app.post('/asset/scrap/', async (req, res) => {
-    try {
-        const { id, reason, date, transaction } = req.body
-        const asset = await assetHistory.create({ reason: reason, issuedate: date, transaction: transaction, assetId: id })
-        const scrapstatus = await assetMaster.update({ scrapstatus: "Inactive" }, { where: { id: id } })
-        if (asset && scrapstatus)
-            return res.json({ "message": "Asset added to scrap" })
-        else
-            return res.json({ 'message': 'Asset not found!' })
-    }
-    catch (e) {
-        // console.log(e);
-        return res.json({ "message": "DB error" })
-    }
-})
-app.post('/asset/service/', async (req, res) => {
-    try {
-        const { id, reason, transaction, fromdate, todate } = req.body
-
-        const asset = await assetHistory.create({ reason: reason, issuedate: fromdate, transaction: transaction, assetId: id })
-
-        const returnasset = await assetHistory.create({ issuedate: todate, transaction: 'Return service', assetId: id })
-        if (asset && returnasset)
-            return res.json({ "message": "Asset maintanance is added" })
-        else
-            return res.json({ "message": "Asset not added" })
-    }
-    catch (e) {
-        // console.log(e);
-        return res.json({ 'message': "Maintanance is not added" })
-    }
-})
-
-
-// edit employee details
-app.put('/employee/details/edit', async (req, res) => {
-    const { id, name, email, contact, address, branch, joindate, enddate, salary, department, status } = req.body;
-    try {
-        const employee = await employees.update({ name: name, email: email, contact: contact, address: address, branch: branch, joinDate: joindate, endDate: enddate, salary: salary, department: department, status: status }, { where: { id: id } });
-        return res.json({ "message": "Updated" });
-    } catch (e) {
-        return res.json({ "error": e })
-    }
-})
-// edit asset category
-app.put('/asset-category/details/edit', async (req, res) => {
-    const { name, id } = req.body;
-    try {
-        const assetcategory = await assetCategory.update({ name: name }, { where: { id: id } });
-        return res.json({ "message": "Asset Category Updated!" });
-    }
-    catch (e) {
-        console.log(e);
-        return res.json({ 'error': e })
-    }
-})
-// edit asset
+// // edit asset
 app.post('/asset/details/view', async (req, res) => {
     try {
         const { id } = req.body
@@ -253,91 +95,91 @@ app.post('/asset/details/view', async (req, res) => {
 })
 
 
-app.put('/asset/details/edit', async (req, res) => {
-    try {
-        const { id, serial_no, name, model, make, scrapstatus } = req.body;
-     
-        const asset = await assetMaster.update({ serial_no: serial_no, name: name, model: model, make: make, scrapstatus: scrapstatus }, { where: { id: id } })
-        if (asset)
-            return res.json({ "message": "Asset updated!" })
-        else
-            return res.json({ "message": "Error!" })
-    }
-    catch (e) {
-        console.log(e);
-        return res.json({ "message": "No records!" })
-    }
-})
-// rerturn asset
-app.post('/asset/return/submit', async (req, res) => {
-    try {
-        const { date, reason, id, transaction, issueto } = req.body;
-        const returnasset = await assetHistory.create({ issuedate: date, reason: reason, transaction: transaction, issueto: issueto, assetId: id })
-      
-        if (returnasset)
-            return res.json({ "message": "Asset Returned!" })
-        else
-            return res.json({ "message": "Asset Not Found!" });
-    }
-    catch (e) {
-        console.log(e);
-        return res.json({ "message": "Invalid user!" })
-    }
-})
 
-
-// asset category
-app.get('/asset-category', (req, res) => {
-    res.render('assetCategory');
-})
-// asset master
-app.get('/asset-tracker/asset-master/', (req, res) => {
-    res.render('assetMaster');
-})
 
 // fetching employeetable data
 app.post("/fetching/employeedetails", isAuthenticate, async (req, res) => {
     const { auth } = req.headers
     var employeesdata = await employees.findAll()
+
     res.send(employeesdata);
 })
 // fetching filtereed data
-app.post("/fetching/employeedetails/filter", async (req, res) => {
+app.post("/fetching/employeedetails/statusfilter", async (req, res) => {
     const { status } = req.body
-    var employeesdata = await employees.findAll({ where: { status: status } })
-    res.send(employeesdata);
+    console.log('status',status);
+    var EmployeesStatus = await employees.findAll({ where: { status: status } })
+    res.send(EmployeesStatus);
+})
+app.post("/fetching/employeedetails/departmentfilter", async (req, res) => {
+    const { status } = req.body
+    var EmployeeDepartment = await employees.findAll({ where: { department: status } })
+    res.send(EmployeeDepartment);
+})
+app.post("/fetching/employeedetails/branchfilter", async (req, res) => {
+    const { status } = req.body
+    var EmployeeBranch = await employees.findAll({ where: { branch: status } })
+    res.send(EmployeeBranch);
+})
+app.get("/fetch/employee/filter", async (req, res) => {
+    try {
+        const Branches  = await employees.findAll({ attributes: ['branch'] ,group:['branch'] })
+        const  Department = await employees.findAll({ attributes: ['department'] ,group:['department'] })
+        console.log(Branches);
+        console.log(Department);
+        return res.json({ Branches,Department });
+    
+    }
+    catch (e) {
+        console.log(e);
+        return res.json({ "Error": e });
+    }
 })
 
-app.post("/fetching/assetdetails/filter", async (req, res) => {
+// Asset Filtering
+app.post("/fetching/assetdetails/statusfilter", async (req, res) => {
     const { status } = req.body
     var employeesdata = await assetMaster.findAll({ where: { scrapstatus: status } })
     res.send(employeesdata);
 })
+app.post("/fetching/assetdetails/categoryfilter", async (req, res) => {
+    const { status } = req.body
+    var employeesdata = await assetMaster.findAll({ where: { type: status } })//change-Category-type
+    res.send(employeesdata);
+})
 // fetching assetcategory table
 app.post('/fetching/assetcategory', isAuthenticate, async (req, res) => {
-    const { auth } = req.headers
-    var assetcategory = await assetCategory.findAll();
-    res.send(assetcategory);
+    try {
+        const { auth } = req.headers
+        var AssetCategory = await assetCategory.findAll();
+        res.send(AssetCategory);
+    }
+    catch (e) {
+        console.log(e);
+    }
 })
+
 // fetching asset table details
 app.post('/fetching/asset', isAuthenticate, async (req, res) => {
     const { auth } = req.headers
     var assets = await assetMaster.findAll();
     res.send(assets);
 })
+
 // fetching asset category to view asset type
 app.get('/fetching/asset/type', async (req, res) => {
     try {
-        var assetcategory = await assetCategory.findAll({ attributes: ['id', 'name'] })
-        if (assetcategory)
-            return res.json({ 'data': assetcategory })
+        var AssetCategory = await assetCategory.findAll({ attributes: ['id', 'name'] })
+        if (AssetCategory)
+            return res.json({ 'data': AssetCategory })
         else
-            return res.json({ 'message': 'No types defined' })
+            return res.json({ 'message': 'Empty Table' })
     }
     catch (e) {
-        return res.json({ 'message': 'DB error' })
+        return res.json({ 'message': 'Invalid Asset Category' })
     }
 })
+
 // fetching employee names for asset issue 
 app.get('/fetching/asset/employee', async (req, res) => {
     try {
@@ -353,9 +195,11 @@ app.get('/fetching/asset/employee', async (req, res) => {
 app.post('/fetching/dashboard/details', isAuthenticate, async (req, res) => {
     try {
         var activecount = 0, inactivecount = 0, activeasset = 0, inactiveasset = 0;
-        var count = await employees.findAll({ attributes: ['status', 'branch'] })
-        for (let i of count) {
-            if (i.status == "Active") { activecount++; }
+        var Employee = await employees.findAll({ attributes: ['id', 'status', 'branch'] })
+        for (let i of Employee) {
+            if (i.status == "Active") {
+                activecount++;
+            }
             else { inactivecount++; }
         }
         var totalasset = await assetMaster.findAll({ attributes: ['scrapstatus'] })
@@ -363,84 +207,40 @@ app.post('/fetching/dashboard/details', isAuthenticate, async (req, res) => {
             if (i.scrapstatus == "Active") { activeasset++; }
             else { inactiveasset++; }
         }
-        var assetcategory = await assetCategory.count()
+        var AssetCategory = await assetCategory.count()
         var branchescount = await employees.count({ attributes: ['branch'], group: ['branch'] })
         var assettype = await assetMaster.count({ attributes: ['type'], group: ['type'] })
-
-        var assetholders=await assetHistory.findAll({attributes:['employeeId']})
-        
-     
-        res.json({ "total": count.length, 'activecount': activecount, 'inactivecount': inactivecount, 'assetcategory': assetcategory, 'totalasset': totalasset.length, 'activeasset': activecount, 'inactiveasset': inactivecount, 'activeasset': activeasset, "inactiveasset": inactiveasset, 'branchescount': branchescount, "assettype": assettype })
+        var AssetHolders = await assetMaster.findAll({ where: { employeeId: { [Op.ne]: null } } });
+        // console.log("assetholders",AssetHolders);
+        var BranchCount = []
+        AssetHolders.forEach((i) => {
+            // console.log(i);
+            for (let j of Employee) {
+                if (j.id == i.employeeId) {
+                    BranchCount.push(j.branch)
+                }
+            }
+        })
+        console.log(BranchCount);
+        res.json({ "total": Employee.length, 'activecount': activecount, 'inactivecount': inactivecount, 'assetcategory': AssetCategory, 'totalasset': totalasset.length, 'activeasset': activecount, 'inactiveasset': inactivecount, 'activeasset': activeasset, "inactiveasset": inactiveasset, 'branchescount': branchescount, "assettype": assettype, "BranchCount": BranchCount })
     }
 
     catch (e) {
+        console.log(e);
         return res.json({ message: "DB error" })
     }
 })
-//fetching employeedetails
-app.post('/employee/view/details', async (req, res) => {
-    var { id } = req.body;
-    var employeedata = await employees.findOne({ where: { id: id } });
-    if (employeedata) {
-        return res.json(employeedata)
-    }
-    return res.json(false);
-})
+
 // fetching asset name
-app.post('/asset-category/details/edit', async (req, res) => {
+app.post('/asset-category/details/view', async (req, res) => {
     const { id } = req.body;
     try {
-        const asset = await assetCategory.findOne({ where: { id: id } });
-        return res.send(asset);
+        const AssetCategory = await assetCategory.findOne({ where: { id: id } });
+        return res.send(AssetCategory);
     }
     catch (e) {
         return res.json({ "message": "Given id is not defined!" });
     }
-})
-//fetching admin data
-app.post("/login", (req, res) => {
-    const { username, password } = req.body;
-    if (username == 'admin' && password == 'admin') {
-      
-        return res.redirect('/employee/register');
-    }
-    else {
-        return res.json(false);
-    }
-})
-app.post('/employee/view/', (req, res) => {
-    var { id } = req.body;
-    res.send(true);
-})
-// fetching asset history
-app.get('/asset/details/history/', async (req, res) => {
-    const assethistory = await assetHistory.findAll()
-    res.send(assethistory);
-})
-// fetching asset scrap status to hide button
-app.get('/asset/scrap/status', async (req, res) => {
-    try {
-        const scrap = await assetMaster.findAll({ attributes: ['scrapstatus', 'id'] })
-  
-        res.json({ "data": scrap })
-    }
-    catch (e) {
-        res.sendStatus(400, e);
-    }
-})
-// delete asset category
-app.delete('/asset-category/delete/', async (req, res) => {
-    var { id } = req.body;
-    try {
-        var asset = await assetCategory.destroy({ where: { id: id } });
-        if (asset) {
-            return res.json({ "message": "Deleted !" });
-        }
-    }
-    catch (e) {
-        return res.json({ "message": "id is not defined" });
-    }
-
 })
 
 // catch 404 and forward to error handler

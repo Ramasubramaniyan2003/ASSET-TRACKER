@@ -1,20 +1,16 @@
-// var addemployeebutton=document.getElementById('addemployeelogo');
-// console.log("xcxccx",addemployeebutton)
-// addemployeebutton.innerHTML='Add employee';
-
 var status = "";
 function statuschecking() {
-
     var a = document.getElementById('flexSwitchCheckChecked').checked;
+    let activestatus=document.getElementById('activestatus')
     if (a) {
-        console.log("Active")
+      
         status = "Active"
-        document.getElementById('activestatus').innerHTML = 'Active'
+        activestatus.innerHTML=status
     }
     else {
-        console.log("Inactive");
+      
         status = "Inactive";
-        document.getElementById('activestatus').innerHTML = 'Inactive'
+        activestatus.innerHTML=status
     }
 }
 async function registeremployee() {
@@ -27,7 +23,7 @@ async function registeremployee() {
         var joindate = document.getElementById('joindate').value;
         var enddate = document.getElementById('enddate').value;
         var salary = document.getElementById('salary').value;
-        var photo = document.getElementById('photo').value;
+        // var photo = document.getElementById('photo').value;
         var department = document.getElementById('department').value;
 
         var res = await fetch("/employee/register/submit", {
@@ -42,7 +38,7 @@ async function registeremployee() {
                 joindate: joindate,
                 enddate: enddate,
                 salary: salary,
-                photo: photo,
+                photo: null,
                 department: department,
                 status: status
             })
@@ -51,17 +47,19 @@ async function registeremployee() {
         var data = await response;
         console.log(data);
         if (data.success) {
-            alert("User created");
-            location.reload();
+            alert("Employee created");
+            // table.clear()
+            // fetching('/fetching/employeedetails')
+            // .draw()
         }
         else {
-            alert('Please Enter Valid details...');
+            alert(data.Error);
         }
     } catch (e) {
         console.log(e);
     }
 }
 
-function close() {
-    console.log("called");
-}
+// function close() {
+//     console.log("called");
+// }

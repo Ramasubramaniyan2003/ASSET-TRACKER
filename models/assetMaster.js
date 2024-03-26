@@ -26,6 +26,10 @@ const assetMaster=sequelize.define('assets',{
     },
     scrapstatus:{
         type:DataTypes.STRING
+    },
+    status:{
+        type:DataTypes.TEXT
     }
+
 })
 module.exports={assetMaster};
