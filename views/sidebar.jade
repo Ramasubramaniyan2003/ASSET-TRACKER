@@ -1,21 +1,37 @@
-.container-fluid#sidebar
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+link(rel="stylesheet", href="/css/sidebar.css")
+
+nav.navbar.navi
+  a.navbar-brand(href="#").text-white.p-3 Asset Tracker
+  .dropdown.pb-1.profile.me-5.pe-3
+          a#dropdownUser1.text-white.text-decoration-none.dropdown-toggle(href='#' data-bs-toggle='dropdown' aria-expanded='false')
+            img.rounded-circle(src='https://cdn-icons-png.flaticon.com/512/9187/9187604.png'  width='30' height='30')
+            span.ms-.d-none.d-sm-inline.mx-1#profile User
+          ul.dropdown-menu.dropdown-menu-dark.text-small.shadow.dropstart
+            //- li
+            //-   a.dropdown-item(href='#') Settings
+            //- li
+            //-   a.dropdown-item(href='#') Profile
+            //- li
+            //-   hr.dropdown-divider
+            li
+              a.dropdown-item#signout(href='#') Sign out
+.container-fluid
   .row.flex-nowrap
-    .col-auto.col-md-3.col-xl-2.px-sm-2.px-0.bg-dark
-      .d-flex.flex-column.align-items-center.align-items-sm-start.px-3.pt-2.text-white.min-vh-100
-        .d-flex.align-items-center.pb-3.mb-md-0.me-md-auto.text-white.text-decoration-none
-          a(href='/').text-decoration-none.text-white
-            span.fs-5.d-none.d-sm-inline Menu 
-              //- button(type="button" data-bs-dismiss="modal" aria-label="Close" onclick="fun()").btn-close.ms-5.ps-5
-          
+    .col-auto.col-md-3.col-xl-2.px-sm-2.px-0.bg-dark#sidebar
+      .d-flex.flex-column.align-items-center.align-items-sm-start.px-3.pt-2.text-white
+        .d-flex.align-items-end.pb-3.mb-md-0.me-md-auto.text-white.text-decoration-none
+          //- |Menu
+          button(type="button" data-bs-dismiss="modal" aria-label="Close").btn-close.btn-close-white#closebutton
         ul#menu.nav.nav-pills.flex-column.mb-sm-auto.mb-0.align-items-center.align-items-sm-start
           li
-            a.nav-link.px-0.align-middle(href='#submenu1' data-bs-toggle='collapse').text-white
+            a.nav-link.px-0.align-middle(href='/dashboard').text-white
               i.fs-4.bi-speedometer2
               span.ms-1.d-none.d-sm-inline Dashboard
           li
             a.nav-link.px-0.align-middle(href='/employee').text-white
               i.fs-4.bi-grid
-              span.ms-1.d-sm-inline Employee Master
+              span.ms-1.d-sm-inline Employee
           li
             a.nav-link.px-0.align-middle(href='/asset-category').text-white
               i.fs-4.bi-people
@@ -23,21 +39,8 @@
           li
             a.nav-link.px-0.align-middle(href='/asset-tracker/asset-master/').text-white
               i.fs-4.bi-people
-              span.ms-1.d-none.d-sm-inline Asset Master
-        hr
-        .dropdown.pb-4
-          a#dropdownUser1.d-flex.align-items-center.text-white.text-decoration-none.dropdown-toggle(href='#' data-bs-toggle='dropdown' aria-expanded='false')
-            img.rounded-circle(src='#'  width='30' height='30')
-            span.d-none.d-sm-inline.mx-1 User
-          ul.dropdown-menu.dropdown-menu-dark.text-small.shadow
-            li
-              a.dropdown-item(href='#') Settings
-            li
-              a.dropdown-item(href='#') Profile
-            li
-              hr.dropdown-divider
-            li
-              a.dropdown-item(href='#') Sign out
+              span.ms-1.d-none.d-sm-inline Assets
     .col.py-3
-        //- <a href="#" onclick="sidebarhidden()">close</a>
+        //- <i style="font-size:24px" class="fa menubar" id="menubar" onclick="menu()">&#xf0c9;</i>
+
      

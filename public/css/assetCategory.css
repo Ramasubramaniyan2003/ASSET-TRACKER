@@ -19,19 +19,37 @@
     width: 70px;
   }
   .buttons-copy{
-    background-color: rgb(12, 12, 181);
-    color: white;
+    /* background-color: rgb(12, 12, 181);
+    color: white; */
     border: none;
   }
   .buttons-excel{
-    background-color: #006600;
-    color: white;
+    /* background-color: #006600;
+    color: white; */
     border: none;
     /* margin-left: 10px; */
   }
   .buttons-pdf{
-    background-color:  #b30000;
-    color: white;
+    /* background-color:  #b30000;
+    color: white; */
     border: none;
     /* margin-left: 10px; */
   }
+  
+.assetdetailtable input{
+  width: 300px;
+ height: 35px;
+ border-radius: 5px;
+ /* border:1px groove black; */
+}
+
+.addassetcategorybutton{
+float: right;
+}
+.stocks{
+ float: right;
+}
+.btn-size{
+  font-size: 12px;
+  padding:5px 10px;
+}

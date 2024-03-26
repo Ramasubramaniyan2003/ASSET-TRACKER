@@ -8,14 +8,14 @@ const assetHistory=sequelize.define('assethistory',{
         primaryKey:true,
         unique:true
     },
+   transaction:{
+    type:DataTypes.STRING
+    },
     issueto:{
         type:DataTypes.STRING
     },
     issuedate:{
         type:DataTypes.DATE,
-    },
-    returndate:{
-        type:DataTypes.DATE
     },
     reason:{
         type:DataTypes.STRING

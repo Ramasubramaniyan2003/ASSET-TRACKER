@@ -9,15 +9,16 @@ function statuschecking() {
     if (a) {
         console.log("Active")
         status = "Active"
+        document.getElementById('activestatus').innerHTML = 'Active'
     }
     else {
         console.log("Inactive");
         status = "Inactive";
+        document.getElementById('activestatus').innerHTML = 'Inactive'
     }
 }
 async function registeremployee() {
     try {
-
         var name = document.getElementById('name').value;
         var email = document.getElementById('email').value;
         var contact = document.getElementById('contact').value;
@@ -61,6 +62,6 @@ async function registeremployee() {
     }
 }
 
-function close(){
+function close() {
     console.log("called");
 }

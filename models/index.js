@@ -7,7 +7,7 @@ const { assetHistory } = require('./assetHistory');
 
 assetCategory.hasMany(assetMaster);
 assetMaster.hasMany(assetHistory);
-
+employees.hasMany(assetHistory);
 sequelize.sync().then(
     console.log("all the tables created")
 )

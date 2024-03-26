@@ -21,6 +21,9 @@ const assetMaster=sequelize.define('assets',{
     make:{
         type:DataTypes.STRING,
     },
+    type:{
+        type:DataTypes.STRING
+    },
     scrapstatus:{
         type:DataTypes.STRING
     }

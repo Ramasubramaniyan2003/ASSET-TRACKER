@@ -8,40 +8,36 @@
   width: 70px;
 }
 .buttons-copy{
-  background-color: rgb(12, 12, 181);
-  color: white;
+  /* background-color: rgb(12, 12, 181); */
+  /* color: white; */
   border: none;
 }
 .buttons-excel{
-  background-color: #006600;
-  color: white;
+  /* background-color: #006600;
+  color: white; */
   border: none;
-  /* margin-left: 10px; */
 }
 .buttons-pdf{
-  background-color: #b30000;
-  color: white;
+  /* background-color: #b30000;
+  color: white; */
   border: none;
-  /* margin-left: 10px; */
 }
 
-/* .custom-cls select{
+.custom-cls select{
   display: inline;
   height: 33px;
-  width: 100px;
-  margin-left: 70%;
+  width: 200px;
+  padding:5px;
+} 
+ .custom-cls{
+  margin-top: 50px;
+}
+.custom-cls button{
   position: relative;
-  top: 40px;
-} */
-/* .custom-cls p{
-  display: inline;
-  margin-left: 66%;
-  position: relative;
-  top: 68px;
-} */
-
-/* .removeFormat {
-  text-decoration: none; 
- cursor:auto;
-} */
-
+  top:-5px;
+  margin-left: 10px;
+} 
+.btn-size{
+  font-size: 12px;
+  padding:5px 10px;
+}

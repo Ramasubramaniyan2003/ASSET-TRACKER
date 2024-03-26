@@ -10,7 +10,7 @@ head
     //- title employee
 
 body
-        .container.tablecontainer
+        .container-fluid.tablecontainer
             .modal.fade#editmodalId(tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true")
                 .modal-dialog.modal-lg(role="document")
                     .modal-content
@@ -25,17 +25,17 @@ body
                                     th
                                         p(for="name" ) Full Name
                                     td 
-                                        input(type="text" name="name" id="editname" placeholder="Name"  )
+                                        input.p-3(type="text" name="name" id="editname" placeholder="Name"  )
                                 tr 
                                     th 
                                         p(for="email") Email
                                     td 
-                                        input(type="text" name="email"  id="editemail" placeholder="abc@gmail.com" )
+                                        input.p-3(type="text" name="email"  id="editemail" placeholder="abc@gmail.com" )
                                 tr 
                                     th 
                                         p(for="contact") Contact
                                     td 
-                                        input(type="tel" name="contact" id="editcontact" placeholder="9876543210" )    
+                                        input.p-3(type="tel" name="contact" id="editcontact" placeholder="9876543210" )    
                                 tr 
                                     th 
                                         p(for="address") Address
@@ -45,7 +45,7 @@ body
                                     th 
                                         p(for="branch") Branch
                                     td 
-                                        select#editbranch(name="branch" )
+                                        select#editbranch.p-3(name="branch" )
                                             option(value="Salem") Salem
                                             option(value="Coimbatore") Coimbatore
                                             option(value="Chennai") Chennai
@@ -56,27 +56,22 @@ body
                                     th 
                                         p(for="joindate") Join Date
                                     td 
-                                        input#editjoindate(type="date" name="joindate" placeholder="dd/mm/yyyy"  )
+                                        input.p-3#editjoindate(type="date" name="joindate" placeholder="dd/mm/yyyy"  )
                                 tr 
                                     th 
                                         p(for="enddate") End Date
                                     td 
-                                        input#editenddate(type="date" name="enddate" placeholder="dd/mm/yyyy" )
+                                        input.p-3#editenddate(type="date" name="enddate" placeholder="dd/mm/yyyy" )
                                 tr 
                                     th 
                                         p(for="salary") Salary
                                     td 
-                                        input(type="number" placeholder="ex:25000 per month" id="editsalary")
-                                tr 
-                                    th 
-                                        p(for="photo") Photo
-                                    td 
-                                        input#editphoto(type="file" name="employeeimage")
+                                        input.p-3(type="number" placeholder="ex:25000 per month" id="editsalary")
                                 tr 
                                     th 
                                         p(for="department" ) Department
                                     td 
-                                        select#editdepartment(name="department" required)
+                                        select.ps-3#editdepartment(name="department" required)
                                             option(value="IT") IT
                                             option(value="Human resource") Human resource
                                             option(value="Sales") Sales
@@ -87,10 +82,11 @@ body
                                 tr 
                                     th
                                         p(for="Status")#editstatus Status 
-                                    td 
+                                    td  
                                         .form-check.form-switch.mb-3(onclick="statuschecking()")
                                             input.form-check-input.statusbutton(type="checkbox" role="switch" id="editflexSwitchCheckChecked" checked required) 
-                                            p.mx-4 Active
+                                            p.mx-4.my-auto#activestatus
+                                                |Active
                         .modal-footer
                             button.btn.btn-danger.mt-3(aria-label="Close" data-bs-dismiss="modal") Cancel 
                             button.btn.btn-success.mt-3(onclick="editemployeesubmit()") Submit

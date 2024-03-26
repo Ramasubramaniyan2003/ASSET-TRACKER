@@ -5,10 +5,13 @@ function statuschecking() {
     if (a) {
         console.log("Active")
         status = "Active"
+        document.getElementById('activestatus').innerHTML="Active"
     }
     else {
-        console.log("Inactive");
         status = "Inactive";
+       var inactive= document.getElementById('activestatus').innerHTML=status;
+    //    inactive.style.color="red"
+       console.log(inactive);
     }
 }
 async function editemployeesubmit() {

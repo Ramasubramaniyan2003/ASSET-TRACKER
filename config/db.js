@@ -9,5 +9,4 @@ const connection= async ()=>{
     console.log("connected");
 }
 
-
 module.exports={sequelize,connection};

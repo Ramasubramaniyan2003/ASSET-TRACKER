@@ -11,27 +11,28 @@ head
   Add/Edit/View all employees in the company. Provide filters for
   active/inactive employees along with search capabilities
 body
+  .container-fluid
   include ./sidebar.jade
-    a(type="button" onclick="close()") close 
-    include ./employeeRegister.jade
-    include ./employeeedit.jade
-    include ./employeeview.jade 
-     
-
-
-    .custom-cls 
-      //- p Filter
-      //- select#customFilter.form-control(placeholder="Status" onclick="activeinactive()")
-      //-   option(value="Inactive") Inactive
-      //-   option(value="Active") Active    
-    table#employeetable.table.table-bordered  
-      thead
-        th ID
-        th Name
-        th Email
-        th Department
-        th Status
-        th Actions
+      <i style="font-size:24px" class="fa menubar" id="menubar" >&#xf0c9;</i> 
+      include ./employeeRegister.jade
+      include ./employeeedit.jade
+      //- include ./employeeview.jade 
+      .custom-cls 
+        label(style="font-size:20px") Status:
+        select.ms-1#customFilter.ps-2
+          option(value="Inactive")   Inactive
+          option(value="Active") Active
+        button.btn.btn-primary(onclick="activeinactive()") Filter 
+      table#employeetable.table.table-bordered  
+        thead#employeetablehead
+          th ID
+          th Name
+          th Email
+          th Contact
+          th Department
+          th Branch
+          th Status
+          th Actions
   script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js")
   script(src="https://code.jquery.com/jquery-3.6.0.min.js")
   script(src="https://code.jquery.com/jquery-3.7.1.js")
@@ -46,3 +47,4 @@ body
   script(src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.print.min.js") 
   script(src='/bootstrap-5.0.2-dist/bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js')
   script(defer src='/js/employee.js') 
+  script(src="/js/sidebar.js")

@@ -9,7 +9,54 @@ head
 body  
     .container-fluid
     include ./sidebar.jade
-        include ./assetcategoryRegister.jade
+        <i style="font-size:24px" class="fa menubar" id="menubar" onclick="menu()">&#xf0c9;</i> 
+        //- include ./assetcategoryRegister.jade
+        .container.tablecontainer
+        .row.mt-3
+            .col-sm-3
+                h3.employeetopic Asset Category
+            .col-sm-9
+                a.addassetcategorybutton#addassetcategorybutton.btn.btn-primary(type="button" data-bs-toggle="modal" data-bs-target="#assetcategorymodalId")  Add Asset category
+                //- a.btn.btn-primary.stocks.me-3(type="button" data-bs-toggle="modal" data-bs-target="#stocksmodalId") Stocks
+        .modal.fade#assetcategorymodalId(tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true")
+            .modal-dialog.modal-none(role="document")
+                .modal-content
+                    .modal-header
+                        h5.modal-title#modalTitleId
+                            Modal Add Asset 
+                        button(type="button" data-bs-dismiss="modal" aria-label="Close").btn-close
+                    .modal-body    
+                            
+                        table.assetdetailtable
+                            tr
+                                td 
+                                    label(for="assetname").mx-3  Asset Name
+                                    input.ps-3(type="text" name="name" id="assetname" placeholder="Asset name"  )   
+                    .modal-footer
+                        button.btn.btn-danger(aria-label="Close" data-bs-dismiss="modal") Cancel 
+                        button.btn.btn-success(onclick="addassetcategory()") Add
+            //- stocks
+        .modal.fade#stocksmodalId(tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true")
+            .modal-dialog.modal-fullscreen(role="document")
+                .modal-content
+                    .modal-header
+                        h5.modal-title#modalTitleId
+                            Modal Stocks 
+                        button(type="button" data-bs-dismiss="modal" aria-label="Close").btn-close
+                    .modal-body    
+                        table.stocktable
+                            tr
+                                td 
+                                    th Id 
+                                    th Serial no
+                                    th Name 
+                                    th Model 
+                                    th Category 
+                                    th Scrap status
+                    .modal-footer
+                        button.btn.btn-danger(aria-label="Close" data-bs-dismiss="modal") Cancel 
+                        button.btn.btn-success(onclick="addassetcategory()") Add
+        
         .container.tablecontainer.mb-3
                 .modal.fade#assetcategoryeditmodalId(tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true")
                     .modal-dialog.modal-none(role="document")
@@ -23,8 +70,8 @@ body
                                 table.assetdetailtable
                                     tr
                                         td 
-                                            label(for="editassetname").mx-3  Asset Name
-                                            input(type="text" name="name" id="editassetname" placeholder="Asset name" ) 
+                                            label(for="editassetname").mx-3  Asset category
+                                            input.ps-3(type="text" name="name" id="editassetname" placeholder="Asset name" ) 
                             .modal-footer
                                 button.btn.btn-danger(aria-label="Close" data-bs-dismiss="modal") Cancel 
                                 button.btn.btn-success(onclick="editassetcategory()") Edit
@@ -32,9 +79,9 @@ body
         table#assetcategorytable.assetcategorytable.table.table-bordered
             thead
                 th ID
-                th Asset Name
-                th CreatedAt
-                th UpdatedAt
+                th Asset category
+                th Created at
+                th Updated at
                 th Action
 
 script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js")
@@ -44,6 +91,7 @@ script(src="https://cdn.datatables.net/2.0.2/js/dataTables.js")
 script(src="https://cdn.datatables.net/v/bs5/dt-2.0.1/datatables.min.js")
 script(src="https://cdn.datatables.net/buttons/3.0.1/js/dataTables.buttons.js")
 script(src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.dataTables.js")
+
 script(src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js")
 script(src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js")
 script(src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js")
@@ -51,4 +99,5 @@ script(src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.html5.min.js")
 script(src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.print.min.js") 
 script(src='/bootstrap-5.0.2-dist/bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js')
 script(src="/js/moment.js")
-script(src="/js/assetCategory.js")          
+script(src="/js/assetCategory.js") 
+script(src="/js/sidebar.js")         

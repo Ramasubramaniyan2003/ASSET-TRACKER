@@ -1,0 +1,64 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        link(rel="stylesheet", href="/bootstrap-5.0.2-dist/bootstrap-5.0.2-dist/css/bootstrap.min.css")
+        //- script(src="/bootstrap-5.0.2-dist/bootstrap-5.0.2-dist/jd/bootstrap.min.js")
+        link(rel="stylesheet", href="/css/dashboard.css")
+        title Asset Tracker
+    body               
+    include ./sidebar
+           .container-fluid
+                i(style="font-size:24px").fa.menubar#menubar &#xf0c9;
+                h1.mt-5 Asset Tracker
+                .row.mt-5.cards
+                    .col-md-4.col-xl-4
+                        .card.bg-c-blue.order-card.mb-2
+                            .card-block
+                                h6.m-b-20 Employees
+                                    h2.text-right
+                                        img(src="/images/employee/employees.png" style='font-size:24px;' height="30px" width="30px").mb-2
+                                        span.ms-1#totalemployees 486
+                                p.status.m-b-0
+                                    | Active -
+                                    span.f-righ#totalactiveemployees 
+                                    | Inactive -
+                                    span.f-right#totalinactiveemployees 351
+
+
+                    .col-md-4.col-xl-4
+                        .card.bg-success.order-card
+                            .card-block
+                                h6.m-b-20 Asset Category
+                                h2.text-right
+                                    i.fa.fa-cart-plus.f-left 
+                                    span#totalassetcategory 233
+                                p.m-b-0
+                                    | 
+                                    span.f-right.assetcategorydash.mb-3 kk
+                                    
+
+                    .col-md-4.col-xl-4
+                        .card.bg-warning.order-card
+                            .card-block
+                                h6.m-b-20 Assets
+                                    h2.text-right
+                                        i.fa.fa-cart-plus.f-left
+                                        span#totalasset 486
+                                p.m-b-0
+                                    | Active-
+                                    span.f-right#activeasset 351
+                                    | Inactive- 
+                                    span#inactiveasset 23
+                .row
+                    .col-sm-6
+                        canvas#myChart
+                    .col-sm-6
+                        canvas#assets(style="width:100%;max-width:600px")
+script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js")
+script(src="/js/dashboard.js") 
+script(src='/bootstrap-5.0.2-dist/bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js')
+
+script(src="/js/sidebar.js")               
+

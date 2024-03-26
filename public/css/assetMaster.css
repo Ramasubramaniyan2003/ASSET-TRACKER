@@ -1,16 +1,6 @@
-/* /* .assettable{
-    width: 100%;
-} */
-
 .addasset{
     float: right;
 }
-/* .assettable td,.assettable th{
-    padding: 15px 25px;
-    border-style: ridge;
-    border-width: thin;
-   border-color: black;
-  } */
 .dt-buttons button{
     border-radius: 5px;
     height: 37px;
@@ -18,20 +8,54 @@
     width: 70px;
 }
 .buttons-copy{
-    background-color: rgb(12, 12, 181);
-    color: white;
+    /* background-color: rgb(12, 12, 181);
+    color: white; */
     border: none;
 }
 .buttons-excel{
-    background-color: #006600;
-    color: white;
+    /* background-color: #006600;
+    color: white; */
     border: none;
     /* margin-left: 10px; */
 }
 .buttons-pdf{
-    background-color: #b30000;
-    color: white;
+    /* background-color: #b30000;
+    color: white; */
     border: none;
     /* margin-left: 10px; */
 }
+#issueassetname,#issueassetdate,.assetinputtable input,#editscrapstatus,.returnassetinputtable input,.serviceinputtable input,.scrapassetinputtable input{
+width: 250px;
+height: 35px;
+padding-left:10px;
+padding-right:5px ;
+border-radius: 5px;
+}
+.issueassetinputtable,.assetinputtable,.returnassetinputtable,.serviceinputtable,.scrapassetinputtable{
+    display:grid;
+    justify-content: center;
+}
+.hidden{
+    display: none;
+}
+.btn-size{
+    font-size: 12px;
+    padding:5px 10px;
+}
+#customFilter{
+    height: 33px;
+    width: 200px;
+    padding:5px;
+   
+}
+.custom-cls button{
+    position: relative;
+    top:-5px;
+    margin-left: 10px;
+  } 
+  .assetinputtable input,.assetinputtable select{
+    width: 250px;
+    height: 33px;
+    margin-top: 5px;
+  }
  

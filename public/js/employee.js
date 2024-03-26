@@ -1,15 +1,26 @@
 // fetching employees into table
+var table = 'hello'
 fetching('/fetching/employeedetails')
 async function fetching(url) {
     try {
-        var res = await fetch(url);
+        var res = await fetch(url,{method:'POST',headers:{'content-type':'application/json','auth':sessionStorage.getItem('token')}});
         var data = await res.json();
-        let table = new DataTable('#employeetable', {
+        console.log(data);
+        if(data.message){
+            alert(data.message);
+            sessionStorage.removeItem('token');
+            window.location="/"
+        }
+        table = new DataTable('#employeetable', {         
             data: data,
             buttons: ['copy', { extend: 'excel', "title": "Employees" }, { extend: 'pdf', 'title': 'Employee' }],
             layout: {
                 top: 'buttons'
             },
+            "columnDefs": [
+                { 'className': "dt-head-center", 'targets':'_all' },
+                {"className": "text-center", "targets":[]}
+              ],
             columns: [
                 {
                     data: 'id',
@@ -18,36 +29,45 @@ async function fetching(url) {
                 },
                 {
                     data: 'name', "mData": null,
-
                     "bSortable": false,
                     "sClass": "alignCenter"
                 },
                 {
                     data: 'email', "mData": null,
-
+                    "bSortable": false,
+                    
+                },
+                {
+                    data: 'contact', 
+                    "mData": null,
                     "bSortable": false,
                     "sClass": "alignCenter"
                 },
                 {
                     data: 'department', "mData": null,
-
                     "bSortable": false,
-                    "sClass": "alignCenter"
+                    // "sClass": "alignCenter"
+                },
+                {
+                    data: 'branch', "mData": null,
+                    "bSortable": false,
+                    // "sClass": "alignCenter"
                 },
                 {
                     data: 'status', "mData": null,
-                    "bSortable": false,
+                    // "bSortable": false,
                     "sClass": "alignCenter"
                 },
                 {
                     data: null,
                     "bSortable": false,
-                    "sWidth":"7%",
+                    "sWidth":"3%",
                     "render": function (data) {
-                        return `<div class="mx-auto"><a  class="btn btn-primary" data-id=` + data.id + ` onclick="editemployee(this.getAttribute('data-id'))" data-bs-toggle="modal" data-bs-target="#editmodalId">Edit</a> `//<a class="btn btn-success" data-id=` + data.id + ` onclick="Viewemployee(this.getAttribute('data-id'))" data-bs-toggle="modal" data-bs-target="#viewmodal">View</a></div>`
+                        return `<div class="mx-auto"><a class="btn btn-primary btn-sm btn-size" data-id=` + data.id + ` onclick="editemployee(this.getAttribute('data-id'))" data-bs-toggle="modal" data-bs-target="#editmodalId">Edit</a> `//<a class="btn btn-success" data-id=` + data.id + ` onclick="Viewemployee(this.getAttribute('data-id'))" data-bs-toggle="modal" data-bs-target="#viewmodal">View</a></div>`
                     }
                 }
-            ]
+            ],
+            autoWidth: false
 
         });
 
@@ -57,10 +77,18 @@ async function fetching(url) {
         console.log(e);
     }
 }
-function activeinactive() {
+async function activeinactive() {
     var customFilter = document.getElementById('customFilter').value;
     console.log(customFilter);
-
+    var id = await fetch('/fetching/employeedetails/filter', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: `{"status":"${customFilter}"}`
+    })
+    var employeesdata=await id.json();
+        table.clear().draw();
+        table.rows.add(employeesdata); 
+        table.columns.adjust().draw();
 }
 async function Viewemployee(a) {
     console.log('view')
@@ -81,7 +109,6 @@ async function Viewemployee(a) {
     }
 }
 async function editemployee(a) {
-    console.log(a);
     sessionStorage.setItem('editId', a);
     var employeeedit = await fetch('/employee/view/details', {
         method: 'POST',

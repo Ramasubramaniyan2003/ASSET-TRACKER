@@ -1,14 +1,23 @@
 assetcategoryfetch('/fetching/assetcategory');
 async function assetcategoryfetch(url) {
     try {
-        var assetpromise = await fetch(url)
+        var assetpromise = await fetch(url,{method:'POST',headers:{'content-type':'application/json','auth':sessionStorage.getItem('token')}})
         var assetcategory = await assetpromise.json();
+        if(assetcategory.message){
+            alert(assetcategory.message)
+            sessionStorage.removeItem('token')
+            window.location='/'
+        }
         var assetcategorytable = new DataTable('#assetcategorytable', {
             data: assetcategory,
-            buttons: ['copy',{extend:'excel',"title":"Asset Category"},{extend:'pdf','title':'Asset Category'}],
+            buttons: ['copy', { extend: 'excel', "title": "Asset Category" }, { extend: 'pdf', 'title': 'Asset Category' }],
             layout: {
-                top:'buttons'
+                top: 'buttons'
             },
+            "columnDefs": [
+                { 'className': "dt-head-center", 'targets':'_all' },
+                // {"className": "text-center", "targets":[]}
+              ],
             columns: [
                 {
                     data: "id",
@@ -43,12 +52,13 @@ async function assetcategoryfetch(url) {
                 {
                     data: null,
                     "mData": null,
-                    "sWidth": "9%",
+                    "sWidth": "7%",
                     "bSortable": false,
                     "sClass": "alignCenter",
-                    "render": function (data) { return `<div class="btn btn-primary" data-id=` + data.id + ` onclick="assetcategoryedit(this.getAttribute('data-id'))" data-bs-toggle="modal" data-bs-target="#assetcategoryeditmodalId">Edit </div>  <div class="btn btn-danger" data-id=` + data.id + ` onclick="assetcategorydelete(this.getAttribute('data-id'))">Delete</div>` },
+                    "render": function (data) { return `<div class="btn btn-primary btn-size" data-id=` + data.id + ` onclick="assetcategoryedit(this.getAttribute('data-id'))" data-bs-toggle="modal" data-bs-target="#assetcategoryeditmodalId">Edit </div>  <div class="btn btn-danger btn-size" data-id=` + data.id + ` onclick="assetcategorydelete(this.getAttribute('data-id'))">Delete</div>` },
                 }
-            ]
+            ],
+            autoWidth: false
         })
     }
     catch (e) {
@@ -60,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementsByClassName('dt-search-0').style = "width: 250px ; height: 209px;"
 }
 )
-console.log(document.getElementsByClassName('dt-search-0'));
+// console.log(document.getElementsByClassName('dt-search-0'));
 
 
 async function assetcategoryedit(a) {

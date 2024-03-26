@@ -13,5 +13,6 @@ const assetCategory=sequelize.define('assetcategory',{
         type:DataTypes.STRING,
         allowNull:false
     }
+    
 })
 module.exports={assetCategory};
