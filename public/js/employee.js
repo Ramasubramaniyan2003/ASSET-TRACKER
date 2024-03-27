@@ -1,16 +1,19 @@
 // fetching employees into table
 var table = 'hello'
+let tabledata='';
 fetching('/fetching/employeedetails')
 async function fetching(url) {
     try {
         var res = await fetch(url, { method: 'POST', headers: { 'content-type': 'application/json', 'auth': sessionStorage.getItem('token') } });
         var data = await res.json();
-        console.log(data);
+        // console.log(data);
+        tabledata=data;
         if (data.message) {
             alert(data.message);
             sessionStorage.removeItem('token');
             window.location = "/"
         }
+        
         // $ajax({
         //     url:'/fetching/employeedetails',
         //     type:'POST',
@@ -103,9 +106,6 @@ async function Filter() {
     var Branch = document.getElementById('BranchFilter').value;
 
     var Department = document.getElementById('DepartmentFilter').value;
-    console.log(Department);
-    console.log(Branch);
-    console.log(Status);
     if (Status != 'None') {
         var id = await fetch('/fetching/employeedetails/statusfilter', {
             method: 'POST',
@@ -113,11 +113,15 @@ async function Filter() {
             body: `{"status":"${Status}"}`
         })
         var employeesdata = await id.json();
+        if (employeesdata.Token) {
+            alert(employeesdata.message);
+            sessionStorage.removeItem('token');
+            window.location = "/"
+        }
         console.log(employeesdata);
         table.clear().draw();
         table.rows.add(employeesdata);
         table.columns.adjust().draw();
-
     }
     else if (Department != 'None') {
         // console.log(customFilter);
@@ -128,6 +132,11 @@ async function Filter() {
             body: `{"status":"${Department}"}`
         })
         var employeesdata = await id.json();
+        if (employeesdata.Token) {
+            alert(employeesdata.message);
+            sessionStorage.removeItem('token');
+            window.location = "/"
+        }
         table.clear().draw();
         table.rows.add(employeesdata);
         table.columns.adjust().draw();
@@ -140,12 +149,35 @@ async function Filter() {
             body: `{"status":"${Branch}"}`
         })
         var employeesdata = await id.json();
+        if (employeesdata.Token) {
+            alert(data.message);
+            sessionStorage.removeItem('token');
+            window.location = "/"
+        }
         table.clear().draw();
         table.rows.add(employeesdata);
         table.columns.adjust().draw();
 
     }
-}
+    // else if(Branch!='None' && Department!='None' && Status!='None'){
+    //     var id = await fetch('/fetching/employeedetails/threefilter', {
+    //         method: 'POST',
+    //         headers: { 'content-type': 'application/json','auth': sessionStorage.getItem('token')  },
+    //         body: `{"branch":"${Branch}","department":"${Department}","status":"${Status}"}`
+    //     })
+        var employeesdata = await id.json();
+        if (employeesdata.Token) {
+            alert(data.message);
+            sessionStorage.removeItem('token');
+            window.location = "/"
+        }
+        table.clear().draw();
+        table.rows.add(employeesdata);
+        table.columns.adjust().draw();
+
+
+    }
+
 
 async function Viewemployee(a) {
     console.log('view')
@@ -171,6 +203,11 @@ async function editemployee(a) {
         body: `{"id":"${a}"}`
     });
     var employeeeditdata = await employeeedit.json();
+    if (employeeeditdata.Token) {
+        alert(employeeeditdata.Token);
+        sessionStorage.removeItem('token');
+        window.location = "/"
+    }
     var name = document.getElementById('editname').value = employeeeditdata.name;
     var email = document.getElementById('editemail').value = employeeeditdata.email;
     var contact = document.getElementById('editcontact').value = employeeeditdata.contact;
@@ -189,6 +226,11 @@ async function viewemployee(id) {
     console.log("viewed");
     var viewemployee = await fetch('/employee/view/details', { method: 'POST', headers: { "content-type": "application/json",'auth': sessionStorage.getItem('token')  }, body: JSON.stringify({ id: id }) })
     var viewemployeedata = await viewemployee.json();
+    if ( viewemployeedata.Token) {
+        alert( viewemployeedata.Token);
+        sessionStorage.removeItem('token');
+        window.location = "/"
+    }
     var id = document.getElementById('viewid');
     var name = document.getElementById('viewname');
     var email = document.getElementById('viewemail');
@@ -214,7 +256,6 @@ async function viewemployee(id) {
     department.innerHTML = viewemployeedata.department;
     updated.innerHTML = viewemployeedata.updatedAt
         ;
-    console.log(status.innerHTML);
     if (status.innerHTML == "Active") {
         status.style.color = "green";
     }
@@ -228,13 +269,13 @@ async function FilterView(){
     var response=await fetch('/fetch/employee/filter')
     var data=await response.json();
     BranchFilter.innerHTML=`<option value="None">All</option>`
-    for(let i of data.Branches){
+    for(let i of data.branches){
     BranchFilter.innerHTML+=`<option value="${i.branch}">${i.branch}</option>`
 }
 let DepartmentFilter=document.getElementById('DepartmentFilter')
 DepartmentFilter.innerHTML=`<option value="None">All</option>`
 
-for(let i of data.Department){
+for(let i of data.department){
     DepartmentFilter.innerHTML+=`<option value="${i.department}">${i.department}</option>`
        
 }

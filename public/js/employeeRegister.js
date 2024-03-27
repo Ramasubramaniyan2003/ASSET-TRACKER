@@ -1,4 +1,4 @@
-var status = "";
+var status = "Active";
 function statuschecking() {
     var a = document.getElementById('flexSwitchCheckChecked').checked;
     let activestatus=document.getElementById('activestatus')
@@ -23,12 +23,11 @@ async function registeremployee() {
         var joindate = document.getElementById('joindate').value;
         var enddate = document.getElementById('enddate').value;
         var salary = document.getElementById('salary').value;
-        // var photo = document.getElementById('photo').value;
         var department = document.getElementById('department').value;
-
+        console.log(name,' ',branch);
         var res = await fetch("/employee/register/submit", {
             method: 'POST',
-            headers: { "content-type": "application/json" },
+            headers: { "content-type": "application/json", 'auth': sessionStorage.getItem('token')},
             body: JSON.stringify({
                 name: name,
                 email: email,
@@ -38,25 +37,30 @@ async function registeremployee() {
                 joindate: joindate,
                 enddate: enddate,
                 salary: salary,
-                photo: null,
                 department: department,
                 status: status
             })
         })
         var response = await res.json();
-        var data = await response;
-        console.log(data);
-        if (data.success) {
-            alert("Employee created");
-            // table.clear()
-            // fetching('/fetching/employeedetails')
-            // .draw()
+        if(response.message){
+            alert(response.message)
+            location.href='/'
         }
-        else {
-            alert(data.Error);
+        console.log(response);
+        if (response.success) {
+            alert("Employee created");
+            var res = await fetch('/fetching/employeedetails', { method: 'POST', headers: { 'content-type': 'application/json', 'auth': sessionStorage.getItem('token') } });
+            var data = await res.json();
+            table.clear().draw();
+            table.rows.add(data); 
+            table.columns.adjust().draw(); 
+        }
+        else{
+            alert(response.Error)
         }
     } catch (e) {
         console.log(e);
+        alert(e)
     }
 }
 

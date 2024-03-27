@@ -21,7 +21,7 @@ document.getElementById('addasset').addEventListener('click', async () => {
         var scrapstatus = document.querySelector('#scrapstatus').value
         var sendingdata = await fetch('/asset/add', {
             method: 'POST',
-            headers: { 'content-type': 'application/json' },
+            headers: { 'content-type': 'application/json', 'auth': sessionStorage.getItem('token') },
             body: JSON.stringify({ assetname: assetname, serial_no: serial_no, model: model, make: make, scrapstatus: scrapstatus, assettype: assettype, assetcategoryid: assetcategoryid })
         })
         var res = await sendingdata.json()
@@ -34,6 +34,7 @@ document.getElementById('addasset').addEventListener('click', async () => {
     }
 })
 var assettable = "";
+let assettabledata = ''
 assettablefetching('/fetching/asset');
 async function assettablefetching(url) {
     try {
@@ -44,15 +45,15 @@ async function assettablefetching(url) {
             sessionStorage.removeItem('token')
             window.location = "/"
         }
-        console.log('datakk',assettabledata);
+        console.log('datakk', assettabledata);
         assettable = new DataTable("#assettable", {
             data: assettabledata,
             buttons: [{ extend: 'copy' }, { extend: 'excel', "title": "Asset List" }, { extend: 'pdf', "title": "Asset List" }],
             layout: {
                 top: 'buttons'
             },
-            scrollY:'40vh',
-            scrollCollapse:true,
+            scrollY: '40vh',
+            scrollCollapse: true,
             "columnDefs": [
                 { 'className': "dt-head-center", 'targets': '_all' },
                 // {"className": "text-center", "targets":[]}
@@ -67,7 +68,7 @@ async function assettablefetching(url) {
                     data: 'serial_no',
                     "bSortable": false,
                     "sClass": "alignCenter",
-                    
+
                 },
                 {
                     data: 'name',
@@ -121,16 +122,18 @@ async function assettablefetching(url) {
 async function buttonhide() {
     var response = await fetch('/asset/details/history/');
     var data = await response.json();
-  
+    console.log(data);
     for (let i = 0; i < data.length; i++) {
-        if (data[i].transaction == 'Issue' && data[i].assetId != null ) {
+        if (data[i].transaction == 'Issue' && data[i].assetId != null) {
             var issue = document.getElementById(`assetissue${data[i].assetId}`);
             var returnbutton = document.getElementById(`returnbutton${data[i].assetId}`)
             let servicebutton = document.getElementById(`servicebutton${data[i].assetId}`)
-           
-            if(issue==null){
+            let returnservicebutton = document.getElementById(`returnservicebutton${data[i].assetId}`)
+
+            if (issue == null) {
                 continue;
             }
+            returnservicebutton.style.display='none'
             servicebutton.style.display = 'none'
             issue.style.display = 'none';
             returnbutton.style.display = 'inline-block';
@@ -139,7 +142,7 @@ async function buttonhide() {
             var issue = document.getElementById(`assetissue${data[i].assetId}`);
             var returnbutton = document.getElementById(`returnbutton${data[i].assetId}`)
             let servicebutton = document.getElementById(`servicebutton${data[i].assetId}`)
-            if(issue==null){
+            if (issue == null) {
                 continue;
             }
             issue.style.display = "inline-block"
@@ -149,7 +152,7 @@ async function buttonhide() {
         else if (data[i].transaction == 'Service' && data[i].assetId != null) {
             let returnservicebutton = document.getElementById(`returnservicebutton${data[i].assetId}`)
             var issue = document.getElementById(`assetissue${data[i].assetId}`);
-            if(issue==null){
+            if (issue == null) {
                 continue;
             }
             issue.style.display = 'none';
@@ -160,7 +163,7 @@ async function buttonhide() {
         else if (data[i].transaction == 'Return Service' && data[i].assetId != null) {
             let returnservicebutton = document.getElementById(`returnservicebutton${data[i].assetId}`)
             var issue = document.getElementById(`assetissue${data[i].assetId}`);
-            if(issue==null){
+            if (issue == null) {
                 continue;
             }
             issue.style.display = 'inline-block';
@@ -168,10 +171,10 @@ async function buttonhide() {
             let servicebutton = document.getElementById(`servicebutton${data[i].assetId}`)
             servicebutton.style.display = 'inline-block'
         }
-        else if (data[i].transaction == 'Scrapped' && data[i].assetId != null) {
+        else if (data[i].transaction == 'Scrap' && data[i].assetId != null) {
             let returnservicebutton = document.getElementById(`returnservicebutton${data[i].assetId}`)
             var issue = document.getElementById(`assetissue${data[i].assetId}`);
-            if(issue==null){
+            if (issue == null) {
                 continue;
             }
             issue.style.display = 'none';
@@ -192,10 +195,12 @@ async function scrapmode() {
             var returnbutton = document.getElementById(`returnbutton${data.data[i].id}`)
             var scrapbutton = document.getElementById(`scrapbutton${data.data[i].id}`)
             var servicebutton = document.getElementById(`servicebutton${data.data[i].id}`);
-            issue.style.display = "none";
-            returnbutton.style.display = "none";
-            scrapbutton.style.display = "none";
-            servicebutton.style.display = "none";
+            if (issue != null) {
+                issue.style.display = "none";
+                returnbutton.style.display = "none";
+                scrapbutton.style.display = "none";
+                servicebutton.style.display = "none";
+            }
         }
     }
 }
@@ -203,10 +208,15 @@ async function editdisplay(id) {
     try {
         var response = await fetch('/asset/details/view', {
             method: 'POST',
-            headers: { 'content-type': 'application/json' },
+            headers: { 'content-type': 'application/json', 'auth': sessionStorage.getItem('token') },
             body: JSON.stringify({ id: id })
         })
         var data = await response.json();
+        if (data.Token) {
+            alert(data.Token);
+            sessionStorage.removeItem('token');
+            window.location = "/"
+        }
         var serial_no = document.querySelector('#editserial_no').value = data.data.serial_no
         var name = document.querySelector('#editassetname').value = data.data.name
         var model = document.querySelector('#editmodel').value = data.data.model
@@ -225,27 +235,43 @@ async function edit() {
     var model = document.querySelector('#editmodel').value
     var scrapstatus = document.querySelector('#editscrapstatus').value
     var make = document.querySelector('#editmake').value
-    console.log(id);
     var response = await fetch('/asset/details/edit', {
         method: 'PUT',
-        headers: { 'content-type': 'application/json' },
+        headers: { 'content-type': 'application/json', 'auth': sessionStorage.getItem('token') },
         body: JSON.stringify({ id: id, serial_no: serial_no, name: name, model: model, make: make, scrapstatus: scrapstatus })
     })
     var data = await response.json();
+    if (data.Token) {
+        alert(data.Token);
+        sessionStorage.removeItem('token');
+        window.location = "/"
+    }
     alert(data.message);
-    location.reload();
+    var assettablepromise = await fetch('/fetching/asset', { method: 'POST', headers: { 'content-type': 'application/json', 'auth': sessionStorage.getItem('token') } });
+    var assettabledata = await assettablepromise.json();
+    assettable.clear().draw();
+    assettable.rows.add(assettabledata);
+    assettable.columns.adjust().draw();
+    buttonhide()
     sessionStorage.removeItem('assetid');
 }
 async function history(id) {
     var response = await fetch('/asset/history', {
         method: "POST",
-        headers: { 'content-type': 'application/json' },
+        headers: { 'content-type': 'application/json', 'auth': sessionStorage.getItem('token') },
         body: JSON.stringify({ id: id })
     })
     var data = await response.json()
+    if (data.Token) {
+        alert(data.Token);
+        sessionStorage.removeItem('token');
+        window.location = "/"
+    }
+
     if (data.message != 'false') {
+        
         var historyassetinputtable = document.getElementById('historyassetinputtable')
-        historyassetinputtable.innerHTML = `<th>S.No</th><th>Employee id</th> <th>Transaction</th> <th>Employee</th> <th> Date</th> <th> Remarks</th>`;
+        historyassetinputtable.innerHTML = `<thead class="historyheader"><th>S.No</th><th>Employee id</th> <th>Transaction</th> <th>Employee</th> <th> Date</th> <th> Remarks</th></thead>`;
         for (let i in data) {
             if (data[i].reason == null) reason = 'NA';
             else reason = data[i].reason
@@ -262,7 +288,6 @@ async function history(id) {
         var issuedate = document.getElementById('historyissuedate').innerHTML = "none"
         var returndate = document.getElementById('historyreturndate').innerHTML = "none"
         var reason = document.getElementById('historyreason').innerHTML = "none"
-
     }
 }
 
@@ -271,6 +296,7 @@ async function issueassetview(id) {
     sessionStorage.setItem('assetid', id)
     var response = await fetch('/fetching/asset/employee');
     var data = await response.json();
+
     var issueassetname = document.querySelector('#issueassetname');
     for (let i = 0; i < data.data.length; i++) {
         var val = data.data[i].id + ' - ' + data.data[i].name;
@@ -278,6 +304,8 @@ async function issueassetview(id) {
         issueassetname.innerHTML += option;
         console.log(option);
     }
+    buttonhide()
+
 }
 async function issueasset() {
     var id = sessionStorage.getItem('assetid');
@@ -291,52 +319,74 @@ async function issueasset() {
     var response = await fetch('/asset/issue', {
         method: 'POST',
         headers: {
-            'content-type': 'application/json'
+            'content-type': 'application/json', 'auth': sessionStorage.getItem('token')
         },
         body: JSON.stringify({ EmployeeId: EmployeeId, issueto: issueassetname, issuedate: issueassetdate, AssetId: id, reason: assetissuereason })
     })
     var data = await response.json();
+    if (data.Token) {
+        alert(data.Token);
+        sessionStorage.removeItem('token');
+        window.location = "/"
+    }
     alert(data.message);
-    // location.reload();
+    var assettablepromise = await fetch('/fetching/asset', { method: 'POST', headers: { 'content-type': 'application/json', 'auth': sessionStorage.getItem('token') } });
+    var assettabledata = await assettablepromise.json();
+    assettable.clear().draw();
+    assettable.rows.add(assettabledata);
+    assettable.columns.adjust().draw();
+    buttonhide();
 }
 
 async function returnview(id) {
     sessionStorage.setItem('assetid', id)
     var response = await fetch('/asset/return', {
         method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        headers: { 'content-type': 'application/json', 'auth': sessionStorage.getItem('token') },
         body: JSON.stringify({ id: id })
     })
     var data = await response.json();
+    if (data.Token) {
+        alert(data.Token);
+        sessionStorage.removeItem('token');
+        window.location = "/"
+    }
     console.log('return', data);
     var issueassetdateinreturn = document.getElementById('issueassetdateinreturn')
     var returnassetname = document.getElementById('returnassetname');
     issueassetdateinreturn.innerHTML = moment(data.data.issuedate).format('DD/MM/YYYY');
     returnassetname.innerHTML = data.data.issueto;
+    
+    buttonhide();
 }
 async function returnasset() {
     var id = sessionStorage.getItem('assetid');
     var issueassetname = document.querySelector('#returnassetname').innerHTML;
     var returnassetdate = document.getElementById('returnassetdate').value
     var assetreason = document.getElementById('assetreason').value;
-    let Today=new Date()
-    const CheckingSevenDaysAgo=new Date(Today)
+    let Today = new Date()
+    const CheckingSevenDaysAgo = new Date(Today)
     // CheckingSevenDaysAgo.setDate(Today.getDate()-7)
     // if(returnassetdate>CheckingSevenDaysAgo&& returnassetdate<=Today){
     // console.log(CurrentDate);
     var response = await fetch('/asset/return/submit', {
         method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        headers: { 'content-type': 'application/json', 'auth': sessionStorage.getItem('token') },
         body: JSON.stringify({ date: returnassetdate, reason: assetreason, id: id, transaction: "Return", issueto: issueassetname })
     })
     var data = await response.json();
+    if (data.Token) {
+        alert(data.Token);
+        sessionStorage.removeItem('token');
+        window.location = "/"
+    }
     alert(data.message)
-    // location.reload();
-    // }
-    // else{
-        // alert('The Due Date Exists ')
-    // }
-   
+    var assettablepromise = await fetch('/fetching/asset', { method: 'POST', headers: { 'content-type': 'application/json', 'auth': sessionStorage.getItem('token') } });
+    var assettabledata = await assettablepromise.json();
+    assettable.clear().draw();
+    assettable.rows.add(assettabledata);
+    assettable.columns.adjust().draw();
+    buttonhide();
 }
 function scrapview(id) {
     sessionStorage.setItem('scrapid', id)
@@ -348,13 +398,23 @@ async function scrap() {
     if (confirm('Do you want to Scarp a asset') == true) {
         var response = await fetch('/asset/scrap/', {
             method: 'POST',
-            headers: { 'content-type': 'application/json' },
+            headers: { 'content-type': 'application/json', 'auth': sessionStorage.getItem('token') },
             body: `{"id":"${id}","reason":"${reason}","date":"${date}"}`
         })
         var data = await response.json();
+        if (data.Token) {
+            alert(data.Token);
+            sessionStorage.removeItem('token');
+            window.location = "/"
+        }
         alert(data.message);
-        console.log(data);
-        // window.location.reload();
+
+        var assettablepromise = await fetch('/fetching/asset', { method: 'POST', headers: { 'content-type': 'application/json', 'auth': sessionStorage.getItem('token') } });
+        var assettabledata = await assettablepromise.json();
+        assettable.clear().draw();
+        assettable.rows.add(assettabledata);
+        assettable.columns.adjust().draw();
+        buttonhide()
     }
 }
 function serviceview(id) {
@@ -373,13 +433,23 @@ async function service(val) {
 
             var response = await fetch('/asset/service/', {
                 method: 'POST',
-                headers: { 'content-type': 'application/json' },
+                headers: { 'content-type': 'application/json', 'auth': sessionStorage.getItem('token') },
                 body: `{"id":"${id}","reason":"${reason}","date":"${fromdate}","transaction":"Service"}`
             })
             var data = await response.json();
+            if (data.Token) {
+                alert(data.Token);
+                sessionStorage.removeItem('token');
+                window.location = "/"
+            }
             alert(data.message);
             console.log('data', data);
-            // window.location.reload();
+            var assettablepromise = await fetch('/fetching/asset', { method: 'POST', headers: { 'content-type': 'application/json', 'auth': sessionStorage.getItem('token') } });
+            var assettabledata = await assettablepromise.json();
+            assettable.clear().draw();
+            assettable.rows.add(assettabledata);
+            assettable.columns.adjust().draw();
+            buttonhide();
 
         }
     }
@@ -391,62 +461,78 @@ async function service(val) {
         if (confirm('Do you want to Return a asset') == true) {
             var response = await fetch('/asset/service/return', {
                 method: 'POST',
-                headers: { 'content-type': 'application/json' },
+                headers: { 'content-type': 'application/json', 'auth': sessionStorage.getItem('token') },
                 body: `{"id":"${id}","reason":"${reason}","date":"${returndate}"}`
             })
             var data = await response.json();
+            if (data.Token) {
+                alert(data.Token);
+                sessionStorage.removeItem('token');
+                window.location = "/"
+            }
             alert(data.message);
-            console.log('data', data);
-            // window.location.reload();
+            var assettablepromise = await fetch('/fetching/asset', { method: 'POST', headers: { 'content-type': 'application/json', 'auth': sessionStorage.getItem('token') } });
+            var assettabledata = await assettablepromise.json();
+            assettable.clear().draw();
+            assettable.rows.add(assettabledata);
+            assettable.columns.adjust().draw();
+            buttonhide()
         }
     }
 }
 // category filter list view
 Categoryfilter()
-async function Categoryfilter(){
-    let response= await fetch('/fetching/asset/type')
-    let data=await response.json()
-    let CategoryFilter=document.getElementById('CategoryFilter')
-    if(data.message)
+async function Categoryfilter() {
+    let response = await fetch('/fetching/asset/type')
+    let data = await response.json()
+    let CategoryFilter = document.getElementById('CategoryFilter')
+    if (data.message)
         alert(data.message)
-    CategoryFilter.innerHTML=`<option value="None">All</option>`
-    for(let i in data.data){
-        CategoryFilter.innerHTML+=`<option value='${data.data[i].name}'>${data.data[i].name}</option>`
+    CategoryFilter.innerHTML = `<option value="None">All</option>`
+    for (let i in data.data) {
+        CategoryFilter.innerHTML += `<option value='${data.data[i].name}'>${data.data[i].name}</option>`
     }
-   
+    buttonhide()
+
 }
 async function Filter(val) {
     var StatusFilter = document.getElementById('StatusFilter').value;
     var CategoryFilter = document.getElementById('CategoryFilter').value;
-    if (StatusFilter!='None') {
-       
+    if (StatusFilter != 'None') {
+
         var id = await fetch('/fetching/assetdetails/statusfilter', {
             method: 'POST',
-            headers: { 'content-type': 'application/json' },
+            headers: { 'content-type': 'application/json', 'auth': sessionStorage.getItem('token') },
             body: `{"status":"${StatusFilter}"}`
         })
         var employeesdata = await id.json();
+        if (data.Token) {
+            alert(data.Token);
+            sessionStorage.removeItem('token');
+            window.location = "/"
+        }
         console.log(employeesdata);
-        
+
         assettable.clear().draw();
         assettable.rows.add(employeesdata); // Add new data
         assettable.columns.adjust().draw(); // Redraw the DataTable
-        
+
     }
-   else if (CategoryFilter!='None') {
+    else if (CategoryFilter != 'None') {
         var id = await fetch('/fetching/assetdetails/categoryfilter', {
             method: 'POST',
-            headers: { 'content-type': 'application/json' },
+            headers: { 'content-type': 'application/json', 'auth': sessionStorage.getItem('token') },
             body: `{"status":"${CategoryFilter}"}`
         })
         var employeesdata = await id.json();
-        console.log(employeesdata);
-        
+        if (employeesdata.Token) {
+            alert(data.Token);
+            sessionStorage.removeItem('token');
+            window.location = "/"
+        }
         assettable.clear().draw();
-        assettable.rows.add(employeesdata); // Add new data
-        assettable.columns.adjust().draw(); // Redraw the DataTable
-        // buttonhide();
-        // 
+        assettable.rows.add(employeesdata);
+        assettable.columns.adjust().draw();
     }
     buttonhide()
 }

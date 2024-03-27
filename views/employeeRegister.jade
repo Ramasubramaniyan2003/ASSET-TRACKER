@@ -25,17 +25,17 @@ body
                                 th
                                     p(for="name" ) Full Name
                                 td 
-                                    input.p-3(type="text" name="name" id="name" placeholder="Name"  )
+                                    input.p-3(type="text" name="name" id="name" placeholder="Name" required)
                             tr 
                                 th 
                                     p(for="email") Email
                                 td 
-                                    input.p-3(type="text" name="email"  id="email" placeholder="abc@gmail.com" )
+                                    input.p-3(type="email" name="email"  id="email" placeholder="abc@gmail.com" required)
                             tr 
                                 th 
                                     p(for="contact") Contact
                                 td 
-                                    input.p-3(type="tel" name="contact" id="contact" placeholder="9876543210" )    
+                                    input.p-3(type="tel" name="contact" id="contact" placeholder="9876543210" pattern=" /^[1-9]{1}[0-9]{9}$/"  required)    
                             tr 
                                 th 
                                     p(for="address") Address
@@ -56,7 +56,7 @@ body
                                 th 
                                     p(for="joindate") Join Date
                                 td 
-                                    input.ps-3#joindate(type="date" name="joindate" placeholder="dd/mm/yyyy"  )
+                                    input.ps-3#joindate(type="date" name="joindate" placeholder="dd/mm/yyyy"  required)
                             tr 
                                 th 
                                     p(for="enddate") End Date
@@ -89,5 +89,5 @@ body
                                         p.mx-4#activestatus Active
                     .modal-footer
                         button.btn.btn-danger.mt-3(aria-label="Close" data-bs-dismiss="modal") Cancel 
-                        button.btn.btn-success.mt-3(onclick="registeremployee()") Submit
+                        button.btn.btn-success.mt-3(type="submit" data-bs-dismiss="modal" onclick="registeremployee()") Submit
                                 

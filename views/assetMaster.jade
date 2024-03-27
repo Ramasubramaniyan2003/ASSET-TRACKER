@@ -134,16 +134,21 @@ html(lang="en")
                                     button.btn.btn-success#addasset(onclick="issueasset('issue')") Issue
                 //history button
                 .modal.fade#historyassetmodalId(tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true")
-                        .modal-dialog.modal-xl(role="document")
+                        .modal-dialog.modal-dialog-scrollable.modal-xl(role="document")
                             .modal-content
                                 .modal-header
                                     h5.modal-title#modalTitleId
                                         Modal Asset history 
                                     button(type="button" data-bs-dismiss="modal" aria-label="Close").btn-close
                                 .modal-body    
-                                    table.historyassetinputtable.table.table-hover.table-bordered#historyassetinputtable(style="overflowX:auto")
-                                        th S_no
-                                        th Employee Id
+                                    table.mt-3.historyassetinputtable.table.table-hover.table-bordered#historyassetinputtable
+                                        thead.historyheader
+                                            //- th S_no
+                                            //- th Employee Id
+                                            //- th Transaction 
+                                            //- th Employee 
+                                            //- th Date 
+                                            //- th Remarks
                                         
                                         
                 //return asset

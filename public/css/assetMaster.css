@@ -89,13 +89,15 @@
 #historyassetmodalId{
     height: 70vh;
 }
-/* .historyassetinputtable{
-    ::-webkit-scrollbar-thumb
-
-} */
-::-webkit-scrollbar-thumb{
-    /* right: 100px; */
-    position: relative;
-    left: 100px;
-    width: 50px;
+.historyheader{
+    background-color: white;
+    position: sticky;
+    z-index: 100;
+    top:-20px;
+   
 }
+.historyassetinputtable{
+    overflow-y: hidden;
+}
+
+

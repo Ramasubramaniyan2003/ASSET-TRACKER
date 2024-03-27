@@ -3,15 +3,15 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const { assetMaster, Admin, assetCategory, employees, assetHistory } = require('./models/index');
+const { assetMaster, Admin, assetCategory, employees } = require('./models/index');
 const { Op } = require('./config/db')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 var app = express();
 const fs = require('fs')
-const employeeRouter = require('./routes/Employee')
-const Assets = require('./routes/Assets')
-const AssetCategory = require('./routes/AssetCategory')
+const employeeRouter = require('./routes/employee')
+const Assets = require('./routes/assets')
+const AssetCategory = require('./routes/assetcategory')
 
 
 app.use(bodyParser.json());
@@ -19,10 +19,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const isAuthenticate = (req, res, next) => {
     const { auth } = req.headers
-    var tokenverify = jwt.verify(auth, 'Assettracker', (err, token) => {
+    jwt.verify(auth, 'Assettracker', (err, token) => {
         if (err) {
-            res.json({ 'message': "unauthorized" })
-            // res.redirect('/');
+            res.json({ 'Token': "unauthorized" })
         }
         next();
     })
@@ -38,13 +37,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// app.use('/', indexRouter);
-app.get('/newlogin', (req, res) => {
-    res.sendFile(path.join(__dirname, 'loginexample.html'))
-})
-app.get('/newlogin1', (req, res) => {
-    res.render('newlogin')
-})
+
 app.get('/', (req, res) => {
     res.render('login');
 })
@@ -63,7 +56,7 @@ app.post("/login", async (req, res, next) => {
         const admin = await Admin.findOne({ where: { userName: username } });
         const match = await bcrypt.compare(password, admin.password);
         const token = jwt.sign(JSON.stringify(admin), "Assettracker")
-        if (admin && password == admin.password) {
+        if (admin && match) {
             return res.json({ "success": true, "message": "admin login in", "token": token, "username": username });
         }
         else {
@@ -72,7 +65,7 @@ app.post("/login", async (req, res, next) => {
     }
     catch (e) {
         console.log(e);
-        return res.json({ "success": false, "message": "db error" });
+        return res.json({ "success": false, "message": "Login Failed" });
     }
 })
 
@@ -94,41 +87,37 @@ app.post('/asset/details/view', async (req, res) => {
     }
 })
 
-
-
-
 // fetching employeetable data
-app.post("/fetching/employeedetails", isAuthenticate, async (req, res) => {
-    const { auth } = req.headers
-    var employeesdata = await employees.findAll()
+app.post("/fetching/employeedetails", async (req, res) => {
+    var employeesData = await employees.findAll()
+    res.send(employeesData);
+})
 
-    res.send(employeesdata);
-})
 // fetching filtereed data
-app.post("/fetching/employeedetails/statusfilter", async (req, res) => {
+app.post("/fetching/employeedetails/statusfilter",  async (req, res) => {
     const { status } = req.body
-    console.log('status',status);
-    var EmployeesStatus = await employees.findAll({ where: { status: status } })
-    res.send(EmployeesStatus);
+    var employeesStatus = await employees.findAll({ where: { status: status } })
+    res.send(employeesStatus);
 })
+
 app.post("/fetching/employeedetails/departmentfilter", async (req, res) => {
     const { status } = req.body
-    var EmployeeDepartment = await employees.findAll({ where: { department: status } })
-    res.send(EmployeeDepartment);
+    var employeeDepartment = await employees.findAll({ where: { department: status } })
+    res.send(employeeDepartment);
 })
 app.post("/fetching/employeedetails/branchfilter", async (req, res) => {
     const { status } = req.body
-    var EmployeeBranch = await employees.findAll({ where: { branch: status } })
-    res.send(EmployeeBranch);
+    var employeeBranch = await employees.findAll({ where: { branch: status } })
+    res.send(employeeBranch);
 })
+
+
+
 app.get("/fetch/employee/filter", async (req, res) => {
     try {
-        const Branches  = await employees.findAll({ attributes: ['branch'] ,group:['branch'] })
-        const  Department = await employees.findAll({ attributes: ['department'] ,group:['department'] })
-        console.log(Branches);
-        console.log(Department);
-        return res.json({ Branches,Department });
-    
+        const branches = await employees.findAll({ attributes: ['branch'], group: ['branch'] })
+        const department = await employees.findAll({ attributes: ['department'], group: ['department'] })
+        return res.json({ branches, department });
     }
     catch (e) {
         console.log(e);
@@ -139,16 +128,16 @@ app.get("/fetch/employee/filter", async (req, res) => {
 // Asset Filtering
 app.post("/fetching/assetdetails/statusfilter", async (req, res) => {
     const { status } = req.body
-    var employeesdata = await assetMaster.findAll({ where: { scrapstatus: status } })
-    res.send(employeesdata);
+    var employeesData = await assetMaster.findAll({ where: { scrapstatus: status } })
+    res.send(employeesData);
 })
 app.post("/fetching/assetdetails/categoryfilter", async (req, res) => {
     const { status } = req.body
-    var employeesdata = await assetMaster.findAll({ where: { type: status } })//change-Category-type
-    res.send(employeesdata);
+    var employeesData = await assetMaster.findAll({ where: { type: status } })//change-Category-type
+    res.send(employeesData);
 })
 // fetching assetcategory table
-app.post('/fetching/assetcategory', isAuthenticate, async (req, res) => {
+app.post('/fetching/assetcategory', async (req, res) => {
     try {
         const { auth } = req.headers
         var AssetCategory = await assetCategory.findAll();
@@ -160,8 +149,7 @@ app.post('/fetching/assetcategory', isAuthenticate, async (req, res) => {
 })
 
 // fetching asset table details
-app.post('/fetching/asset', isAuthenticate, async (req, res) => {
-    const { auth } = req.headers
+app.post('/fetching/asset',  async (req, res) => {
     var assets = await assetMaster.findAll();
     res.send(assets);
 })
@@ -192,37 +180,34 @@ app.get('/fetching/asset/employee', async (req, res) => {
     }
 })
 // fetching total employess and asset details
-app.post('/fetching/dashboard/details', isAuthenticate, async (req, res) => {
+app.post('/fetching/dashboard/details',  async (req, res) => {
     try {
-        var activecount = 0, inactivecount = 0, activeasset = 0, inactiveasset = 0;
+        var activeCount = 0, inactiveCount = 0, activeAsset = 0, inactiveAsset = 0;
         var Employee = await employees.findAll({ attributes: ['id', 'status', 'branch'] })
         for (let i of Employee) {
             if (i.status == "Active") {
-                activecount++;
+                activeCount++;
             }
-            else { inactivecount++; }
+            else { inactiveCount++; }
         }
         var totalasset = await assetMaster.findAll({ attributes: ['scrapstatus'] })
         for (let i of totalasset) {
-            if (i.scrapstatus == "Active") { activeasset++; }
-            else { inactiveasset++; }
+            if (i.scrapstatus == "Active") { activeAsset++; }
+            else { inactiveAsset++; }
         }
         var AssetCategory = await assetCategory.count()
         var branchescount = await employees.count({ attributes: ['branch'], group: ['branch'] })
         var assettype = await assetMaster.count({ attributes: ['type'], group: ['type'] })
         var AssetHolders = await assetMaster.findAll({ where: { employeeId: { [Op.ne]: null } } });
-        // console.log("assetholders",AssetHolders);
         var BranchCount = []
         AssetHolders.forEach((i) => {
-            // console.log(i);
             for (let j of Employee) {
                 if (j.id == i.employeeId) {
                     BranchCount.push(j.branch)
                 }
             }
         })
-        console.log(BranchCount);
-        res.json({ "total": Employee.length, 'activecount': activecount, 'inactivecount': inactivecount, 'assetcategory': AssetCategory, 'totalasset': totalasset.length, 'activeasset': activecount, 'inactiveasset': inactivecount, 'activeasset': activeasset, "inactiveasset": inactiveasset, 'branchescount': branchescount, "assettype": assettype, "BranchCount": BranchCount })
+        res.json({ "total": Employee.length, 'activecount': activeCount, 'inactivecount': inactiveCount, 'assetcategory': AssetCategory, 'totalasset': totalasset.length, 'activeasset': activeCount, 'inactiveasset': inactiveCount, 'activeasset': activeAsset, "inactiveasset": inactiveAsset, 'branchescount': branchescount, "assettype": assettype, "BranchCount": BranchCount })
     }
 
     catch (e) {
@@ -258,6 +243,6 @@ app.use(function (err, req, res, next) {
     res.render('error');
 });
 app.listen(3000, () => {
-    console.log("server started...");
+    console.log("server started.....");
 });
 

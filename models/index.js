@@ -1,15 +1,9 @@
 const { employees } = require('./employee')
 const { Admin } = require('./admin')
 const { sequelize } = require('../config/db');
-const { assetCategory } = require('./assetCategory')
-const { assetMaster } = require('./assetMaster');
-const { assetHistory } = require('./assetHistory');
-const{Sample}=require('./sample')
-const{Sample1}=require('./sample1')
-
-// sample table
-Sample.hasMany(Sample1)
-Sample1.belongsTo(Sample)
+const { assetCategory } = require('./assetcategory')
+const { assetMaster } = require('./assetmaster');
+const { assetHistory } = require('./assethistory');
 
 assetCategory.hasMany(assetMaster);
 assetMaster.belongsTo(assetCategory);
@@ -23,4 +17,4 @@ assetMaster.belongsTo(employees);
 sequelize.sync().then(
     console.log("all the tables created")
 )
-module.exports = { Admin, employees, assetCategory, assetMaster, assetHistory ,Sample,Sample1}
+module.exports = { Admin, employees, assetCategory, assetMaster, assetHistory }

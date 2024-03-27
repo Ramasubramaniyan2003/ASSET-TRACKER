@@ -32,22 +32,22 @@ body
                                     th
                                         p(for="name" ) Full Name
                                     td 
-                                        input.p-3(type="text" name="name" id="editname" placeholder="Name"  )
+                                        input.p-3(type="text" name="name" id="editname" placeholder="Name" required )
                                 tr 
                                     th 
                                         p(for="email") Email
                                     td 
-                                        input.p-3(type="text" name="email"  id="editemail" placeholder="abc@gmail.com" )
+                                        input.p-3(type="email" name="email"  id="editemail" placeholder="abc@gmail.com"  required)
                                 tr 
                                     th 
                                         p(for="contact") Contact
                                     td 
-                                        input.p-3(type="tel" name="contact" id="editcontact" placeholder="9876543010" )    
+                                        input.p-3(type="tel" name="contact" id="editcontact" placeholder="9876543010" pattern="[1-9]{1}[0-9]{9}" required)    
                                 tr 
                                     th 
                                         p(for="address") Address
                                     td 
-                                        textarea#editaddress(name="address", cols="60", rows="6" ) 
+                                        textarea#editaddress(name="address", cols="60", rows="6" required) 
                                 tr 
                                     th 
                                         p(for="branch") Branch
@@ -63,17 +63,17 @@ body
                                     th 
                                         p(for="joindate") Join Date
                                     td 
-                                        input.p-3#editjoindate(type="date" name="joindate" placeholder="dd/mm/yyyy"  )
+                                        input.p-3#editjoindate(type="date" name="joindate" placeholder="dd/mm/yyyy"  required)
                                 tr 
                                     th 
                                         p(for="enddate") End Date
                                     td 
-                                        input.p-3#editenddate(type="date" name="enddate" placeholder="dd/mm/yyyy" )
+                                        input.p-3#editenddate(type="date" name="enddate" placeholder="dd/mm/yyyy" required)
                                 tr 
                                     th 
                                         p(for="salary") Salary
                                     td 
-                                        input.p-3(type="number" placeholder="ex:25000 per month" id="editsalary")
+                                        input.p-3(type="number" placeholder="ex:25000 per month" id="editsalary" required)
                                 tr 
                                     th 
                                         p(for="department" ) Department
@@ -96,7 +96,7 @@ body
                                                 |Active
                         .modal-footer
                             button.btn.btn-danger.mt-3(aria-label="Close" data-bs-dismiss="modal") Cancel 
-                            button.btn.btn-success.mt-3(onclick="editemployeesubmit()" data-bs-dismiss="modal" aria-label="Close") Edit
+                            button.btn.btn-success.mt-3(onclick="editemployeesubmit()" type="submit") Edit
                              
     .custom-cls 
          .row

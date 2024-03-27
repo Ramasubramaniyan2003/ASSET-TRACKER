@@ -1,22 +1,34 @@
 const express = require('express')
 const router = express.Router()
-const { assetMaster, Admin, assetCategory, employees, assetHistory } = require('../models/index');
+const jwt=require('jsonwebtoken')
+const { assetMaster, assetHistory } = require('../models/index');
 
+
+function isAuthenticate(req, res, next) {
+    const { auth } = req.headers
+    jwt.verify(auth, 'Assettracker', (err, token) => {
+        if (err) {
+            res.json({ 'message': "unauthorized" })
+            // res.redirect('/');
+        }
+        next();
+    })
+}
 // add assets
 router.get('/', (req, res) => {
     res.render('assetMaster');
 })
-router.post('/add', async (req, res) => {
+router.post('/add', isAuthenticate, async (req, res) => {
     try {
         const { assetname, serial_no, model, make, scrapstatus, assettype, assetcategoryid } = req.body;
         const SerialNo = await assetMaster.findOne({ where: { serial_no: serial_no } })
         if (!assetname || !serial_no || !model || !make || !scrapstatus || !assettype) {
-            return res.json({ 'message': 'Input fields should be required.' })
+            return res.json({ 'message': 'Input fields is required.' })
         }
         if (SerialNo) {
             return res.json({ 'message': 'Duplicate Serial No.' })
         }
-       
+
         const asset = await assetMaster.create({ name: assetname, serial_no: serial_no, model: model, make: make, scrapstatus: scrapstatus, type: assettype, assetcategoryId: assetcategoryid })
         if (asset)
             return res.json({ "message": "Asset Added" })
@@ -27,11 +39,11 @@ router.post('/add', async (req, res) => {
     }
 })
 
-router.post('/issue', async (req, res) => {
+router.post('/issue', isAuthenticate, async (req, res) => {
     try {
         const { EmployeeId, issueto, issuedate, AssetId, reason } = req.body;
         if (!EmployeeId || !issueto || !issuedate || !AssetId) {
-            return res.json({ 'message': 'Input fields should be required.' })
+            return res.json({ 'message': 'Input fields is required.' })
         }
         const Asset = await assetHistory.create({ issueto: issueto, issuedate: issuedate, assetId: AssetId, transaction: 'Issue', reason: reason, employeeId: EmployeeId });
         await assetMaster.update({ 'employeeId': EmployeeId, 'status': 'Issued' }, { where: { 'id': AssetId } });
@@ -45,7 +57,7 @@ router.post('/issue', async (req, res) => {
         return res.json({ "message": e });
     }
 })
-router.post('/history', async (req, res) => {
+router.post('/history', isAuthenticate, async (req, res) => {
     try {
         const { id } = req.body
         const history = await assetHistory.findAll({ where: { assetId: id } });
@@ -61,7 +73,7 @@ router.post('/history', async (req, res) => {
     }
 })
 
-router.post('/return', async (req, res) => {
+router.post('/return', isAuthenticate, async (req, res) => {
     try {
         const { id } = req.body;
         const ReturnAsset = await assetHistory.findOne({ attributes: ['issueto', 'issuedate'], where: { assetId: id }, order: [['id', 'DESC']] });
@@ -74,15 +86,15 @@ router.post('/return', async (req, res) => {
         }
     }
     catch (e) {
-        console.log('Error /return',e);
+        console.log('Error /return', e);
         return res.json({ "message": e });
     }
 })
-router.post('/scrap/', async (req, res) => {
+router.post('/scrap/', isAuthenticate, async (req, res) => {
     try {
         const { id, reason, date } = req.body
-        if(!date){
-            return res.json({"message":"The date field should be required."})
+        if (!date) {
+            return res.json({ "message": "The date field is required." })
         }
         const asset = await assetHistory.create({ reason: reason, issuedate: date, transaction: 'Scrap', assetId: id })
         const ScrapStatus = await assetMaster.update({ scrapstatus: "Inactive", status: 'Scrapped' }, { where: { id: id } })
@@ -92,15 +104,15 @@ router.post('/scrap/', async (req, res) => {
             return res.json({ 'message': 'Asset not found!' })
     }
     catch (e) {
-        console.log("Error /scrap/",e);
+        console.log("Error /scrap/", e);
         return res.json({ "message": e })
     }
 })
-router.post('/service/', async (req, res) => {
+router.post('/service/', isAuthenticate, async (req, res) => {
     try {
         const { id, reason, date } = req.body
-        if(!date){
-            return res.json({"message":"The date field should be required."})
+        if (!date) {
+            return res.json({ "message": "The date field is required." })
         }
         const AssetService = await assetHistory.create({ reason: reason, issuedate: date, transaction: "Service", assetId: id })
         const ScrapStatus = await assetMaster.update({ status: 'Service' }, { where: { id: id } })
@@ -110,16 +122,16 @@ router.post('/service/', async (req, res) => {
             return res.json({ "message": "Asset not added" })
     }
     catch (e) {
-        console.log('Error in /service/',e);
+        console.log('Error in /service/', e);
         return res.json({ 'message': e })
     }
 })
 
-router.post('/service/return', async (req, res) => {
+router.post('/service/return', isAuthenticate, async (req, res) => {
     try {
         const { id, reason, date } = req.body
-        if(!date){
-            return res.json({"message":"The date field should be required."})
+        if (!date) {
+            return res.json({ "message": "The date field is required." })
         }
         const AssetReturn = await assetHistory.create({ reason: reason, issuedate: date, transaction: "Return Service", assetId: id })
         const ScrapStatus = await assetMaster.update({ status: 'Unallocated' }, { where: { id: id } })
@@ -129,13 +141,13 @@ router.post('/service/return', async (req, res) => {
             return res.json({ "message": "Error try again!" })
     }
     catch (e) {
-        console.log('Error in /service/return',e);
+        console.log('Error in /service/return', e);
         return res.json({ 'message': "" })
     }
 })
 
 // edit asset
-router.post('/details/view', async (req, res) => {
+router.post('/details/view', isAuthenticate, async (req, res) => {
     try {
         const { id } = req.body
         const asset = await assetMaster.findOne({ where: { id: id } });
@@ -151,16 +163,27 @@ router.post('/details/view', async (req, res) => {
         return res.json({ "message": "details fetching error" });
     }
 })
-router.put('/details/edit', async (req, res) => {
+router.put('/details/edit', isAuthenticate, async (req, res) => {
     try {
         const { id, serial_no, name, model, make, scrapstatus } = req.body;
 
-        if(!id || !serial_no || !name || !model || !make || !scrapstatus){
-            return res.json({'message':'Input fields should be required.'})
+        if (!id || !serial_no || !name || !model || !make || !scrapstatus) {
+            return res.json({ 'message': 'Input fields is required.' })
         }
-        const SerialNo=await assetMaster.findOne({where:{serial_no:SerialNo}})
-        if(serial_no){
-            return res.json({"message":"Duplicate Serial No"})
+        if(!serial_no){
+            return res.json({ 'message': 'Serial field is required.' })
+        }
+        if(!name){
+            return res.json({ 'message': 'Name field is required.' })
+        }
+        if(!model){
+            return res.json({ 'message': 'Model field is required.' })
+        }
+        if(!make){
+            return res.json({ 'message': 'Make field is required.' })
+        }
+        if(!scrapstatus){
+            return res.json({ 'message': 'Scrap Status field is required.' })
         }
         const asset = await assetMaster.update({ serial_no: serial_no, name: name, model: model, make: make, scrapstatus: scrapstatus }, { where: { id: id } })
         if (asset)
@@ -170,15 +193,15 @@ router.put('/details/edit', async (req, res) => {
     }
     catch (e) {
         console.log(e);
-        return res.json({ "message": "No records!" })
+        return res.json({ "message": "Invalid Data!" })
     }
 })
 
-router.post('/return/submit', async (req, res) => {
+router.post('/return/submit', isAuthenticate, async (req, res) => {
     try {
         const { date, reason, id, transaction, issueto } = req.body;
-        if(!date || !transaction || !issueto){
-            return res.json({"message":"Input fields should be required."})
+        if (!date || !transaction || !issueto) {
+            return res.json({ "message": "Input fields is required." })
         }
         const returnasset = await assetHistory.create({ issuedate: date, reason: reason, transaction: transaction, issueto: issueto, assetId: id })
         const ScrapStatus = await assetMaster.update({ status: 'Unallocated' }, { where: { id: id } })

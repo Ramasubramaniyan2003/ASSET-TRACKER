@@ -7,7 +7,6 @@ function editstatuschecking() {
     if (Radio) {
         editstatus = "Active"
         activestatus.innerHTML=editstatus
-      console.log(activestatus);
     }
     else {
         editstatus = "Inactive";
@@ -27,7 +26,7 @@ async function editemployeesubmit() {
     var department = document.getElementById('editdepartment').value;
     var employeedata = await fetch('/employee/details/edit', {
         method: 'PUT',
-        headers: { 'content-type': 'application/json' },
+        headers: { 'content-type': 'application/json' , 'auth': sessionStorage.getItem('token')},
         body: JSON.stringify({
             id: id,
             name: name,
@@ -44,14 +43,15 @@ async function editemployeesubmit() {
         })
     })
     var res = await employeedata.json();
-
-    console.log(res);
     if (res.message) {
         alert(res.message);
+
         sessionStorage.removeItem('editId');
-        // window.location.reload();
-        // $('#employeetable').DataTable().fnDraw()
-        // table.ajax.reload()
+        var res = await fetch('/fetching/employeedetails', { method: 'POST', headers: { 'content-type': 'application/json', 'auth': sessionStorage.getItem('token') } });
+        var data = await res.json();
+        table.clear().draw();
+        table.rows.add(data); 
+        table.columns.adjust().draw(); 
     }
     if(res.Error){
         alert(res.Error)
